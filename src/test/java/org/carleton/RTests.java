@@ -82,8 +82,8 @@ class RTests {
         }
 
         int finalQ2Cards = Q2Cards;
+        int finalQ3Cards = Q3Cards;
         int finalQ4Cards = Q4Cards;
-        int finalQ4Cards1 = Q4Cards;
         int finalQ5Cards = Q5Cards;
         int finalPlagueCards = plagueCards;
         int finalQueensFavorCards = queensFavorCards;
@@ -91,8 +91,8 @@ class RTests {
 
         assertAll(
                 () -> assertEquals(3, finalQ2Cards),
-                () -> assertEquals(4, finalQ4Cards),
-                () -> assertEquals(3, finalQ4Cards1),
+                () -> assertEquals(4, finalQ3Cards),
+                () -> assertEquals(3, finalQ4Cards),
                 () -> assertEquals(2, finalQ5Cards),
                 () -> assertEquals(1, finalPlagueCards),
                 () -> assertEquals(2, finalQueensFavorCards),
