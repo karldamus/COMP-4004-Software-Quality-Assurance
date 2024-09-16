@@ -5,8 +5,9 @@ public class Card {
     private char type;
     private int value;
 
-    public Card() {
-
+    public Card(char type, int value) {
+        this.type = type;
+        this.value = value;
     }
 
     public char getType() {

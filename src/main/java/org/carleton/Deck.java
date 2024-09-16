@@ -3,11 +3,17 @@ package org.carleton;
 import java.util.ArrayList;
 
 public class Deck {
+    ArrayList<Card> deck;
+
     public ArrayList<Card> getAllCards() {
-        return new ArrayList<Card>();
+        return this.deck;
     }
 
     public int getSize() {
-        return 0;
+        return this.deck.size();
+    }
+
+    public void insertCard(Card c) {
+        deck.add(c);
     }
 }
