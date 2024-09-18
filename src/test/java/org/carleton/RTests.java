@@ -15,8 +15,10 @@ class RTests {
     @DisplayName("RESP-1-test-1")
     @Description("This tests the creation of an adventure and event deck. Verifies the size of the decks are as expected.")
     void RESP1Test1() {
-        AdventureDeck adventureDeck = new AdventureDeck();
-        EventDeck eventDeck = new EventDeck();
+        Game game = new Game();
+        game.initDecks();
+        AdventureDeck adventureDeck = game.getAdventureDeck();
+        EventDeck eventDeck = game.getEventDeck();
 
         assertAll(
                 () -> assertEquals(100, adventureDeck.getSize()),
@@ -28,7 +30,9 @@ class RTests {
     @DisplayName("RESP-1-test-2")
     @Description("This tests the validity of a new adventure deck.")
     void RESP1Test2() {
-        AdventureDeck adventureDeck = new AdventureDeck();
+        Game game = new Game();
+        game.initDecks();
+        AdventureDeck adventureDeck = game.getAdventureDeck();
         ArrayList<Card> deck = adventureDeck.getAllCards();
 
         int sumOfFoeCardValues = 0, sumOfWeaponCardValues = 0;
@@ -57,7 +61,9 @@ class RTests {
     @DisplayName("RESP-1-test-3")
     @Description("This tests the validity of a new event deck.")
     void RESP1Test3() {
-        EventDeck eventDeck = new EventDeck();
+        Game game = new Game();
+        game.initDecks();
+        EventDeck eventDeck = game.getEventDeck();
         ArrayList<Card> deck = eventDeck.getAllCards();
 
         int Q2Cards = 0, Q3Cards = 0, Q4Cards = 0, Q5Cards = 0;
@@ -105,7 +111,7 @@ class RTests {
     @Description("This tests the creation of 4 new player objects and validates that player #1 starts")
     void RESP6Test1() {
         Game game = new Game();
-        game.init();
+        game.initPlayers();
 
         Player[] players = game.getPlayers();
 

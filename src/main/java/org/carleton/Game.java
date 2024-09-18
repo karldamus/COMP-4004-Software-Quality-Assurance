@@ -4,12 +4,24 @@ public class Game {
     private static final int NUM_PLAYERS = 4;
 
     private Player[] players;
+    private AdventureDeck adventureDeck;
+    private EventDeck eventDeck;
 
     public Game() {
 
     }
 
     public void init() {
+        this.initDecks();
+        this.initPlayers();
+    }
+
+    public void initDecks() {
+        this.adventureDeck = new AdventureDeck();
+        this.eventDeck = new EventDeck();
+    }
+
+    public void initPlayers() {
         this.players = new Player[NUM_PLAYERS];
 
         for (int i = 0; i < NUM_PLAYERS; i++) {
@@ -20,7 +32,8 @@ public class Game {
         players[0].setTurn(true);
     }
 
-    public Player[] getPlayers() {
-        return this.players;
-    }
+    // Getters
+    public Player[] getPlayers() { return this.players; }
+    public AdventureDeck getAdventureDeck() { return adventureDeck; }
+    public EventDeck getEventDeck() { return eventDeck; }
 }
