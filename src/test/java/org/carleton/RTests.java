@@ -100,7 +100,20 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-6-test-1")
+    @Description("This tests the creation of 4 new player objects and validates that player #1 starts")
+    void RESP6Test1() {
+        Game game = new Game();
+        game.init();
 
+        Player[] players = game.getPlayers();
+
+        assertAll(
+                () -> assertEquals(4, players.length),
+                () -> assertTrue(players[0].isPlayersTurn())
+        );
+    }
 
 
 }
