@@ -107,6 +107,27 @@ class RTests {
         );
     }
 
+    // RESP-2 Tests
+    // Ensure each player has 12 cards
+    // Ensure deck has 48 fewer cards
+    @Test
+    @DisplayName("RESP-2-test-1")
+    @Description("Test distributing 12 cards to each player")
+    void RESP2Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+        game.dealCards();
+
+        assertAll(
+                () -> assertEquals(12, game.getPlayers()[0].getHand().size()),
+                () -> assertEquals(12, game.getPlayers()[1].getHand().size()),
+                () -> assertEquals(12, game.getPlayers()[2].getHand().size()),
+                () -> assertEquals(12, game.getPlayers()[3].getHand().size()),
+                () -> assertEquals(100 - (12 * 4), game.getAdventureDeck().getSize())
+        );
+    }
+
     @Test
     @DisplayName("RESP-5-test-1")
     @Description("Test the shuffling of a deck using statistical analysis")

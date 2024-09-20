@@ -32,6 +32,10 @@ public class Game {
         players[0].setTurn(true);
     }
 
+    public void dealCards() {
+
+    }
+
     // Getters
     public Player[] getPlayers() { return this.players; }
     public AdventureDeck getAdventureDeck() { return adventureDeck; }
