@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -104,6 +105,38 @@ class RTests {
                 () -> assertEquals(2, finalQueensFavorCards),
                 () -> assertEquals(2, finalProsperityCards)
         );
+    }
+
+    @Test
+    @DisplayName("RESP-5-test-1")
+    @Description("Test the shuffling of a deck using statistical analysis")
+    void RESP5Test1() {
+        Game game = new Game();
+        Game game2 = new Game();
+        game.initDecks();
+        game2.initDecks();
+
+        Deck deck1 = game.getAdventureDeck();
+        Deck deck2 = game2.getAdventureDeck();
+
+        deck2.shuffle();
+
+        ArrayList<Card> deck1_1 = deck1.getAllCards();
+        ArrayList<Card> deck2_2 = deck2.getAllCards();
+
+        int numChanged = 0;
+
+        // for each card in deck1 and 2, check if they are different cards
+        for (int i = 0; i < deck2_2.size(); i++) {
+            if (deck2_2.get(i).getType() != deck1_1.get(i).getType()
+            || deck2_2.get(i).getValue() != deck1_1.get(i).getValue()) {
+                numChanged += 1;
+            }
+        }
+
+        int minCardsChanged = deck2.getSize() / 5;
+
+        assertTrue(numChanged > minCardsChanged);
     }
 
     @Test

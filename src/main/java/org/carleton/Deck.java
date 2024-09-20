@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class Deck {
     ArrayList<Card> deck;
 
+    public void shuffle() {
+
+    }
+
     public ArrayList<Card> getAllCards() {
         return this.deck;
     }
