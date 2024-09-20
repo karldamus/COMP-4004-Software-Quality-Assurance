@@ -19,6 +19,10 @@ public class Deck {
         }
     }
 
+    public Card drawCard() {
+        return deck.removeFirst();
+    }
+
     public ArrayList<Card> getAllCards() {
         return this.deck;
     }

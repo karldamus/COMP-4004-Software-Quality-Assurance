@@ -33,7 +33,12 @@ public class Game {
     }
 
     public void dealCards() {
-
+        for (int cardNum = 0; cardNum < 12; cardNum++) {
+            for (int playerNum = 0; playerNum < players.length; playerNum++) {
+                Card c = this.adventureDeck.drawCard();
+                players[playerNum].addCardToHand(c);
+            }
+        }
     }
 
     // Getters
