@@ -6,6 +6,7 @@ public class Game {
     private Player[] players;
     private AdventureDeck adventureDeck;
     private EventDeck eventDeck;
+    private int currentPlayersTurn;
 
     public Game() {
 
@@ -29,7 +30,8 @@ public class Game {
             this.players[i].setTurn(false);
         }
 
-        players[0].setTurn(true);
+        this.currentPlayersTurn = 0;
+        players[currentPlayersTurn].setTurn(true);
     }
 
     public void dealCards() {
@@ -42,7 +44,10 @@ public class Game {
     }
 
     public void endPlayersTurn() {
+        this.players[currentPlayersTurn].setTurn(false);
 
+        this.currentPlayersTurn = (this.currentPlayersTurn + 1) % NUM_PLAYERS;
+        this.players[currentPlayersTurn].setTurn(true);
     }
 
     // Getters
