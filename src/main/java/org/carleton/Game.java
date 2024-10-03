@@ -41,6 +41,10 @@ public class Game {
         }
     }
 
+    public void endPlayersTurn() {
+
+    }
+
     // Getters
     public Player[] getPlayers() { return this.players; }
     public AdventureDeck getAdventureDeck() { return adventureDeck; }

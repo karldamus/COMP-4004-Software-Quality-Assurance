@@ -5,7 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -175,5 +177,47 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-12-test-1")
+    @Description("Game selects next player as the current player to play")
+    void RESP12Test1() {
+        Game game = new Game();
+        game.initPlayers();
+
+        Player[] players = game.getPlayers();
+
+        Boolean[] playersTurns = new Boolean[]{false, false, false, false};
+
+        for (int i = 0; i < players.length; i++) {
+            playersTurns[i] = players[i].isPlayersTurn();
+            game.endPlayersTurn();
+        }
+
+        boolean isAllTrue = Arrays.asList(playersTurns).stream().allMatch(val -> val == true);
+
+        assertTrue(isAllTrue);
+    }
+
+    @Test
+    @DisplayName("RESP-12-test-2")
+    @Description("Game selects next players turn when it is currently the fourth players turn.")
+    void RESP12Test2() {
+        Game game = new Game();
+        game.initPlayers();
+
+        Player[] players = game.getPlayers();
+
+        game.endPlayersTurn(); // end first players turn
+        game.endPlayersTurn(); // end second players turn
+        game.endPlayersTurn(); // end third players turn
+        game.endPlayersTurn(); // end fourth players turn
+
+        assertAll(
+                () -> assertTrue(players[0].isPlayersTurn()),
+                () -> assertFalse(players[1].isPlayersTurn()),
+                () -> assertFalse(players[2].isPlayersTurn()),
+                () -> assertFalse(players[3].isPlayersTurn())
+        );
+    }
 
 }
