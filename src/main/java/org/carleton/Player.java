@@ -25,4 +25,11 @@ public class Player {
     public void setTurn(boolean isPlayersTurn) {
         this.isPlayersTurn = isPlayersTurn;
     }
+
+    public int getNumberOfShields() {
+        return -1;
+    }
+
+    public void awardShields(int i) {
+    }
 }

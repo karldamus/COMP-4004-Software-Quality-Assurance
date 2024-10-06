@@ -178,6 +178,81 @@ class RTests {
     }
 
     @Test
+    @DisplayName("RESP-8-test-1")
+    @Description("Player draws Plague card, have 0 shields already")
+    void RESP8Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+
+        Player player = game.getCurrentPlayer();
+        int startingNumberOfShields = player.getNumberOfShields();
+
+        game.getEventDeck().setTopCard('E', 0);
+        game.drawEventCard();
+
+        int finalNumberOfShields = player.getNumberOfShields();
+
+        assertAll(
+                () -> assertEquals(0, startingNumberOfShields),
+                () -> assertEquals(0, finalNumberOfShields)
+        );
+    }
+
+    @Test
+    @DisplayName("RESP-8-test-2")
+    @Description("Player draws Plague card, have 1 shields already")
+    void RESP8Test2() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+
+        Player player = game.getCurrentPlayer();
+        player.awardShields(1);
+
+        int startingNumberOfShields = player.getNumberOfShields();
+
+        game.getEventDeck().setTopCard('E', 0);
+        game.drawEventCard();
+
+        int finalNumberOfShields = game.getCurrentPlayer().getNumberOfShields();
+
+        assertAll(
+                () -> assertEquals(1, startingNumberOfShields),
+                () -> assertEquals(0, finalNumberOfShields)
+        );
+    }
+
+    @Test
+    @DisplayName("RESP-8-test-3")
+    @Description("Player draws Plague card, has 6 shields already")
+    void RESP8Test3() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+
+        Player player = game.getCurrentPlayer();
+        player.awardShields(6);
+
+        int startingNumberOfShields = player.getNumberOfShields();
+
+        game.getEventDeck().setTopCard('E', 0);
+        game.drawEventCard();
+
+        int finalNumberOfShields = game.getCurrentPlayer().getNumberOfShields();
+
+        assertAll(
+                () -> assertEquals(6, startingNumberOfShields),
+                () -> assertEquals(4, finalNumberOfShields)
+        );
+    }
+
+
+
+
+
+
+    @Test
     @DisplayName("RESP-12-test-1")
     @Description("Game selects next player as the current player to play")
     void RESP12Test1() {

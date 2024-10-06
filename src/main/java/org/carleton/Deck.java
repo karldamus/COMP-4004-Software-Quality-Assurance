@@ -34,4 +34,7 @@ public class Deck {
     public void insertCard(Card c) {
         deck.add(c);
     }
+
+    public void setTopCard(char e, int i) {
+    }
 }

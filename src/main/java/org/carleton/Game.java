@@ -43,6 +43,9 @@ public class Game {
         }
     }
 
+    public void drawEventCard() {
+    }
+
     public void endPlayersTurn() {
         this.players[currentPlayersTurn].setTurn(false);
 
@@ -54,4 +57,5 @@ public class Game {
     public Player[] getPlayers() { return this.players; }
     public AdventureDeck getAdventureDeck() { return adventureDeck; }
     public EventDeck getEventDeck() { return eventDeck; }
+    public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
 }
