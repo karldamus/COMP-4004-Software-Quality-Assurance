@@ -60,11 +60,18 @@ public class Game {
     }
 
     public Card drawAdventureCard() {
-        return null;
+        Card card = this.adventureDeck.drawCard();
+
+        this.getCurrentPlayer().addCardToHand(card);
+
+        return card;
     }
 
     public int computeNumberOfCardsToDiscard(Player player) {
-        return -1;
+        if (player.getHand().size() <= 12)
+            return 0;
+        else
+            return player.getHand().size() - 12;
     }
 
     public void endPlayersTurn() {
