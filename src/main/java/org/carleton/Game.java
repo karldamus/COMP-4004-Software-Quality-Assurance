@@ -6,6 +6,7 @@ public class Game {
     private Player[] players;
     private AdventureDeck adventureDeck;
     private EventDeck eventDeck;
+    private DiscardPile discardedEventCards;
     private int currentPlayersTurn;
 
     public Game() {
@@ -20,6 +21,7 @@ public class Game {
     public void initDecks() {
         this.adventureDeck = new AdventureDeck();
         this.eventDeck = new EventDeck();
+        this.discardedEventCards = new DiscardPile();
     }
 
     public void initPlayers() {
@@ -53,6 +55,7 @@ public class Game {
                 break;
         }
 
+        this.discardedEventCards.insertCard(card);
         return card;
     }
 
@@ -68,5 +71,5 @@ public class Game {
     public AdventureDeck getAdventureDeck() { return adventureDeck; }
     public EventDeck getEventDeck() { return eventDeck; }
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
-    public DiscardPile getDiscardedEventCards() { return null; }
+    public DiscardPile getDiscardedEventCards() { return discardedEventCards; }
 }
