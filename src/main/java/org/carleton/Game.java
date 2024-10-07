@@ -59,6 +59,14 @@ public class Game {
         return card;
     }
 
+    public Card drawAdventureCard() {
+        return null;
+    }
+
+    public int computeNumberOfCardsToDiscard(Player player) {
+        return -1;
+    }
+
     public void endPlayersTurn() {
         this.players[currentPlayersTurn].setTurn(false);
 

@@ -327,4 +327,31 @@ class RTests {
         assertTrue(allCardsSame);
     }
 
+    @Test
+    @DisplayName("RESP-14-test-1")
+    @Description("Game computes n, number of cards to discard by player")
+    void RESP14Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.dealCards();
+
+        int n1 = game.computeNumberOfCardsToDiscard(game.getCurrentPlayer());
+
+        game.drawAdventureCard();
+
+        int n2 = game.computeNumberOfCardsToDiscard(game.getCurrentPlayer());
+
+        game.drawAdventureCard();
+        game.drawAdventureCard();
+
+        int n3 = game.computeNumberOfCardsToDiscard(game.getCurrentPlayer());
+
+        assertAll(
+                () -> assertEquals(0, n1),
+                () -> assertEquals(1, n2),
+                () -> assertEquals(3, n3)
+        );
+    }
+
 }
