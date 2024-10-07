@@ -43,7 +43,7 @@ public class Game {
         }
     }
 
-    public void drawEventCard() {
+    public Card drawEventCard() {
         Card card = this.eventDeck.drawCard();
 
         switch(card.getType()) {
@@ -52,6 +52,8 @@ public class Game {
                     this.players[currentPlayersTurn].plague();
                 break;
         }
+
+        return card;
     }
 
     public void endPlayersTurn() {
@@ -66,4 +68,5 @@ public class Game {
     public AdventureDeck getAdventureDeck() { return adventureDeck; }
     public EventDeck getEventDeck() { return eventDeck; }
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
+    public DiscardPile getDiscardedEventCards() { return null; }
 }

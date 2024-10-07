@@ -295,4 +295,36 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-13-test-1")
+    @Description("Drawn Event cards are added to Event Deck Discard Pile")
+    void RESP13Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+        game.getEventDeck().shuffle();
+
+        DiscardPile testEventDeck = new DiscardPile();
+
+        int eventDeckSize = game.getEventDeck().getSize();
+        for (int i = 0; i < eventDeckSize; i++) {
+            testEventDeck.insertCard(game.drawEventCard());
+        }
+
+        DiscardPile discardedEventCards = game.getDiscardedEventCards();
+
+        boolean allCardsSame = true;
+
+        int discardEventSize = discardedEventCards.getSize();
+        for (int i = 0; i < discardEventSize; i++) {
+            Card c1 = testEventDeck.drawCard();
+            Card c2 = discardedEventCards.drawCard();
+
+            if (c1.getType() != c2.getType() || c1.getValue() != c2.getValue())
+                allCardsSame = false;
+        }
+
+        assertTrue(allCardsSame);
+    }
+
 }
