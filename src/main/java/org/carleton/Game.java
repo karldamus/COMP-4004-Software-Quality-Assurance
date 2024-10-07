@@ -44,6 +44,14 @@ public class Game {
     }
 
     public void drawEventCard() {
+        Card card = this.eventDeck.drawCard();
+
+        switch(card.getType()) {
+            case 'E':
+                if (card.getValue() == 0)
+                    this.players[currentPlayersTurn].plague();
+                break;
+        }
     }
 
     public void endPlayersTurn() {

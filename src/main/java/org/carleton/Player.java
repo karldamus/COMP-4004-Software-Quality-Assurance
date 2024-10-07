@@ -5,9 +5,17 @@ import java.util.ArrayList;
 public class Player {
     ArrayList<Card> hand;
     private boolean isPlayersTurn;
+    private int numberOfShields;
 
     public Player() {
         this.hand = new ArrayList<Card>();
+    }
+
+    public void plague() {
+        if (numberOfShields >= 2)
+            this.numberOfShields -= 2;
+        else
+            numberOfShields = 0;
     }
 
     public ArrayList<Card> getHand() {
@@ -27,9 +35,10 @@ public class Player {
     }
 
     public int getNumberOfShields() {
-        return -1;
+        return this.numberOfShields;
     }
 
     public void awardShields(int i) {
+        this.numberOfShields += i;
     }
 }

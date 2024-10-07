@@ -36,5 +36,6 @@ public class Deck {
     }
 
     public void setTopCard(char e, int i) {
+        deck.set(0, new Card(e, i));
     }
 }
