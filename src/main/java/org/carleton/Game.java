@@ -30,6 +30,7 @@ public class Game {
         for (int i = 0; i < NUM_PLAYERS; i++) {
             this.players[i] = new Player();
             this.players[i].setTurn(false);
+            this.players[i].setPlayerNumber(i + 1);
         }
 
         this.currentPlayersTurn = 0;

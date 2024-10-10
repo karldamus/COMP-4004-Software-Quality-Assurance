@@ -7,14 +7,42 @@ public class Player {
     ArrayList<Card> hand;
     private boolean isPlayersTurn;
     private int numberOfShields;
+    private int playerNumber;
 
     public Player() {
         this.hand = new ArrayList<Card>();
     }
 
     public void displayHand(PrintWriter output) {
+        this.sortHand();
 
+        output.print("Player " + playerNumber + " Hand: ");
+
+        for (Card c : hand) {
+            output.print(c.getType());
+            output.print(c.getValue());
+            output.print(" ");
+        }
+
+        output.println();
+        output.flush();
     }
+
+    public void sortHand() {
+       for (int i = 1; i < hand.size(); i++) {
+           Card curr = hand.get(i);
+           int j = i - 1;
+
+           while (j >= 0 && hand.get(j).compareTo(curr) > 0) {
+               hand.set(j + 1, hand.get(j));
+               j--;
+           }
+
+           hand.set(j + 1, curr);
+       }
+    }
+
+
 
     public void plague() {
         if (numberOfShields >= 2)
@@ -46,4 +74,6 @@ public class Player {
     public void awardShields(int i) {
         this.numberOfShields += i;
     }
+
+    public void setPlayerNumber(int i) { this.playerNumber = i; }
 }
