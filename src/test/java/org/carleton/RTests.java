@@ -256,6 +256,8 @@ class RTests {
     @Description("Game displays hand of current player")
     void RESP11Test1() {
         Game game = new Game();
+        Display display = new Display();
+
         game.initPlayers();
         game.initDecks();
         game.getAdventureDeck().shuffle();
@@ -276,7 +278,8 @@ class RTests {
                 new Card('L', 20)
         };
 
-        // replace current players hand with the rigged hand in randomized order using a new deck to shuffle
+        // replace current players hand with the rigged hand in randomized order
+        // randomized by adding the cards to a new deck to use the shuffle method
         Deck deck = new Deck();
         deck.deck = new ArrayList<>();
         for (Card c : riggedHand)
@@ -287,12 +290,10 @@ class RTests {
         for (int i = 0; i < size; i++)
             game.getCurrentPlayer().getHand().set(i, deck.drawCard());
 
-        String expectedOutput = "Player 1 Hand: F5 F10 F25 F30 F70 D5 D5 S10 H10 B15 B15 L20";
-
         StringWriter output = new StringWriter();
-        game.getCurrentPlayer().displayHand(new PrintWriter(output));
+        display.displayPlayersHand(game.getCurrentPlayer(), new PrintWriter(output));
 
-        assertTrue(output.toString().contains(expectedOutput));
+        assertTrue(output.toString().contains("Player 1 Hand: F5 F10 F25 F30 F70 D5 D5 S10 H10 B15 B15 L20"));
     }
 
 

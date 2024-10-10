@@ -13,21 +13,6 @@ public class Player {
         this.hand = new ArrayList<Card>();
     }
 
-    public void displayHand(PrintWriter output) {
-        this.sortHand();
-
-        output.print("Player " + playerNumber + " Hand: ");
-
-        for (Card c : hand) {
-            output.print(c.getType());
-            output.print(c.getValue());
-            output.print(" ");
-        }
-
-        output.println();
-        output.flush();
-    }
-
     public void sortHand() {
        for (int i = 1; i < hand.size(); i++) {
            Card curr = hand.get(i);
@@ -76,4 +61,5 @@ public class Player {
     }
 
     public void setPlayerNumber(int i) { this.playerNumber = i; }
+    public int getPlayerNumber() { return this.playerNumber; }
 }
