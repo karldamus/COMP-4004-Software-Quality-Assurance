@@ -181,6 +181,38 @@ class RTests {
     }
 
     @Test
+    @DisplayName("RESP-7-test-1")
+    @Description("Game displays next event card")
+    void RESP7Test1() {
+        Game game = new Game();
+        Display display = new Display();
+
+        ArrayList<StringWriter> outputs = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            outputs.add(new StringWriter());
+
+        game.initPlayers();
+        game.initDecks();
+
+        for (int i = 0; i < 3; i++) {
+            game.getEventDeck().setTopCard('E', i);
+            game.drawEventCard();
+            display.displayCurrentEventCard(game.getCurrentEventCard(), new PrintWriter(outputs.get(i)));
+        }
+
+        game.getEventDeck().setTopCard('Q', 4);
+        game.drawEventCard();
+        display.displayCurrentEventCard(game.getCurrentEventCard(), new PrintWriter(outputs.get(3)));
+
+        assertAll(
+                () -> assertEquals("Event Card: Plague\n", outputs.get(0).toString()),
+                () -> assertEquals("Event Card: Queen's Favor\n", outputs.get(1).toString()),
+                () -> assertEquals("Event Card: Prosperity\n", outputs.get(2).toString()),
+                () -> assertEquals("Event Card: QUEST - Stages: 4\n", outputs.get(3).toString())
+        );
+    }
+
+    @Test
     @DisplayName("RESP-8-test-1")
     @Description("Player draws Plague card, have 0 shields already")
     void RESP8Test1() {

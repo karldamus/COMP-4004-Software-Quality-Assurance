@@ -19,4 +19,8 @@ public class Display {
         output.println();
         output.flush();
     }
+
+    public void displayCurrentEventCard(Card c, PrintWriter output) {
+
+    }
 }

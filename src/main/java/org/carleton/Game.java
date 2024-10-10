@@ -10,7 +10,6 @@ public class Game {
     private int currentPlayersTurn;
 
     public Game() {
-
     }
 
     public void init() {
@@ -88,4 +87,5 @@ public class Game {
     public EventDeck getEventDeck() { return eventDeck; }
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
     public DiscardPile getDiscardedEventCards() { return discardedEventCards; }
+    public Card getCurrentEventCard() { return null; }
 }
