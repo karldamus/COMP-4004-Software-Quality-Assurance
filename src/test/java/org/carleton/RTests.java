@@ -4,11 +4,14 @@ import jdk.jfr.Description;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -248,7 +251,49 @@ class RTests {
     }
 
 
+    @Test
+    @DisplayName("RESP-11-test-1")
+    @Description("Game displays hand of current player")
+    void RESP11Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.getAdventureDeck().shuffle();
+        game.dealCards();
 
+        Card[] riggedHand = new Card[]{
+                new Card('F', 5),
+                new Card('F', 10),
+                new Card('F', 25),
+                new Card('F', 30),
+                new Card('F', 70),
+                new Card('D', 5),
+                new Card('D', 5),
+                new Card('S', 10),
+                new Card('H', 10),
+                new Card('B', 15),
+                new Card('B', 15),
+                new Card('L', 20)
+        };
+
+        // replace current players hand with the rigged hand in randomized order using a new deck to shuffle
+        Deck deck = new Deck();
+        deck.deck = new ArrayList<>();
+        for (Card c : riggedHand)
+            deck.insertCard(c);
+        deck.shuffle();
+
+        int size = deck.getSize();
+        for (int i = 0; i < size; i++)
+            game.getCurrentPlayer().getHand().set(i, deck.drawCard());
+
+        String expectedOutput = "Player 1 Hand: F5 F10 F25 F30 F70 D5 D5 S10 H10 B15 B15 L20";
+
+        StringWriter output = new StringWriter();
+        game.getCurrentPlayer().displayHand(new PrintWriter(output));
+
+        assertTrue(output.toString().contains(expectedOutput));
+    }
 
 
 

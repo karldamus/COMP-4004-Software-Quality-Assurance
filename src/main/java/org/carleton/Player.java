@@ -1,5 +1,6 @@
 package org.carleton;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Player {
@@ -9,6 +10,10 @@ public class Player {
 
     public Player() {
         this.hand = new ArrayList<Card>();
+    }
+
+    public void displayHand(PrintWriter output) {
+
     }
 
     public void plague() {
