@@ -1,5 +1,7 @@
 package org.carleton;
 
+import java.io.PrintWriter;
+
 public class Game {
     private static final int NUM_PLAYERS = 4;
 
@@ -8,8 +10,12 @@ public class Game {
     private EventDeck eventDeck;
     private DiscardPile discardedEventCards;
     private int currentPlayersTurn;
+    private Card currentEventCard;
+    private Display display;
+
 
     public Game() {
+        this.display = new Display();
     }
 
     public void init() {
@@ -46,17 +52,19 @@ public class Game {
     }
 
     public Card drawEventCard() {
-        Card card = this.eventDeck.drawCard();
+        this.currentEventCard = this.eventDeck.drawCard();
 
-        switch(card.getType()) {
+        display.displayCurrentEventCard(this.currentEventCard, new PrintWriter(System.out));
+
+        switch(this.currentEventCard.getType()) {
             case 'E':
-                if (card.getValue() == 0)
+                if (this.currentEventCard.getValue() == 0)
                     this.players[currentPlayersTurn].plague();
                 break;
         }
 
-        this.discardedEventCards.insertCard(card);
-        return card;
+        this.discardedEventCards.insertCard(this.currentEventCard);
+        return this.currentEventCard;
     }
 
     public Card drawAdventureCard() {
@@ -87,5 +95,5 @@ public class Game {
     public EventDeck getEventDeck() { return eventDeck; }
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
     public DiscardPile getDiscardedEventCards() { return discardedEventCards; }
-    public Card getCurrentEventCard() { return null; }
+    public Card getCurrentEventCard() { return this.currentEventCard; }
 }

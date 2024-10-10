@@ -21,6 +21,20 @@ public class Display {
     }
 
     public void displayCurrentEventCard(Card c, PrintWriter output) {
+        output.print("Event Card: ");
 
+        if (c.getType() == 'Q') {
+            output.print("QUEST - Stages: " + c.getValue());
+        } else {
+            switch (c.getValue()) {
+                case 0: output.print("Plague"); break;
+                case 1: output.print("Queen's Favor"); break;
+                case 2: output.print("Prosperity"); break;
+            }
+        }
+
+        output.println();
+        output.flush();
     }
+
 }
