@@ -1,6 +1,7 @@
 package org.carleton;
 
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Display {
     public Display() { }
@@ -35,6 +36,26 @@ public class Display {
 
         output.println();
         output.flush();
+    }
+
+    public void singleMessage(String message, PrintWriter output) {
+        output.printf(message);
+        output.flush();
+    }
+
+    public int requestIntegerInput(String requestMessage, Scanner input, PrintWriter output) {
+        output.printf(requestMessage); output.flush();
+
+        String inputStr = input.nextLine();
+        int inputNum = -1;
+
+        try {
+            inputNum = Integer.parseInt(inputStr);
+        } catch (NumberFormatException e) {
+            output.println("Input is not formatted as a number."); output.flush();
+        }
+
+        return inputNum;
     }
 
 }

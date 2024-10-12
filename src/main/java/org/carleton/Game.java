@@ -91,7 +91,31 @@ public class Game {
     }
 
     public void trimHand(Player player, Scanner input, PrintWriter output) {
+        int numberOfCardsToDiscard = computeNumberOfCardsToDiscard(player);
 
+        if (numberOfCardsToDiscard == 0)
+            return;
+
+        // make request
+        String requestMessage = "Enter the position of a card to remove (1-" + player.getHand().size() + ")\n";
+        int inputNum = display.requestIntegerInput(requestMessage, input, output);
+
+        if (inputNum == -1)
+            return;
+
+        // analyze request
+        if (inputNum < 1 || inputNum > player.getHand().size()) {
+            String message = "Entered position is too high or low.\n";
+            display.singleMessage(message, output);
+        } else {
+            int actualIndex = inputNum - 1;
+            player.getHand().remove(actualIndex);
+
+            String message = "Card " + inputNum + " Removed.\n";
+            display.singleMessage(message, output);
+
+            display.displayPlayersHand(player, output);
+        }
     }
 
     // Getters
