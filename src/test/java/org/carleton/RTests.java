@@ -6,12 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.Iterator;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -430,6 +425,83 @@ class RTests {
                 () -> assertEquals(1, n2),
                 () -> assertEquals(3, n3)
         );
+    }
+
+    @Test
+    @DisplayName("RESP-15-test-1")
+    @Description("Game prompts player for position of next card to delete and player enters a valid position.")
+    void RESP15Test1() {
+        Game game = new Game();
+
+        game.initPlayers();
+        game.initDecks();
+
+        ArrayList<Card> riggedHand = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            riggedHand.add(new Card('F', 5));
+        }
+
+        game.getCurrentPlayer().setHand(riggedHand);
+
+        game.getAdventureDeck().setTopCard('F', 10);
+        game.drawAdventureCard();
+
+        StringWriter output = new StringWriter();
+        String input = "2";
+
+        int sizeBeforeTrim = game.getCurrentPlayer().getHand().size();
+
+        game.trimHand(game.getCurrentPlayer(), new Scanner(input), new PrintWriter(output));
+
+        int sizeAfterTrim = game.getCurrentPlayer().getHand().size();
+
+        assertAll(
+                () -> assertEquals(13, sizeBeforeTrim),
+                () -> assertEquals(12, sizeAfterTrim),
+                () -> assertTrue(output.toString().contains("Card 2 Removed")),
+                () -> assertTrue(output.toString().contains("Player 1 Hand: F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F10"))
+        );
+    }
+
+    @Test
+    @DisplayName("RESP-15-test-2")
+    @Description("Game prompts player for position of next card to delete and player enters invalid position.")
+    void RESP15Test2() {
+        Game game = new Game();
+
+        game.initPlayers();
+        game.initDecks();
+
+        game.dealCards();
+        game.drawAdventureCard();
+
+        StringWriter output = new StringWriter();
+        String input = "14";
+
+        game.trimHand(game.getCurrentPlayer(), new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Entered position is too high or low."));
+    }
+
+    @Test
+    @DisplayName("RESP-15-test-3")
+    @Description("Game prompts player for position of next card to delete and player enters NAN.")
+    void RESP15Test3() {
+        Game game = new Game();
+
+        game.initPlayers();
+        game.initDecks();
+
+        game.dealCards();
+        game.drawAdventureCard();
+
+        StringWriter output = new StringWriter();
+        String input = "this is not a number";
+
+        game.trimHand(game.getCurrentPlayer(), new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Input is not formatted as a number."));
     }
 
 }

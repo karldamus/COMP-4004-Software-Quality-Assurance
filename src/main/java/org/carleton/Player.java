@@ -27,7 +27,9 @@ public class Player {
        }
     }
 
+    public void setHand(ArrayList<Card> hand) {
 
+    }
 
     public void plague() {
         if (numberOfShields >= 2)

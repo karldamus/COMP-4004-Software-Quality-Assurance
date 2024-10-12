@@ -1,6 +1,7 @@
 package org.carleton;
 
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class Game {
     private static final int NUM_PLAYERS = 4;
@@ -87,6 +88,10 @@ public class Game {
 
         this.currentPlayersTurn = (this.currentPlayersTurn + 1) % NUM_PLAYERS;
         this.players[currentPlayersTurn].setTurn(true);
+    }
+
+    public void trimHand(Player player, Scanner input, PrintWriter output) {
+
     }
 
     // Getters
