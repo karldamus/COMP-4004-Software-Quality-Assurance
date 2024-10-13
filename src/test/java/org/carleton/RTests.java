@@ -517,5 +517,33 @@ class RTests {
     }
 
 
+    @Test
+    @DisplayName("RESP-16-test-1")
+    @Description("All players decline to sponsor a quest")
+    void RESP16Test1() {
+        Game game = new Game();
+
+        String input = "n\nn\nn\nn";
+        StringWriter output = new StringWriter();
+
+        game.initPlayers();
+        game.initDecks();
+
+        int playersTurnAtStart = game.getCurrentPlayer().getPlayerNumber();
+
+        game.dealCards();
+        game.getEventDeck().setTopCard('Q', 3);
+        game.drawEventCard(new Scanner(input), new PrintWriter((output)));
+
+        int playersTurnAtEnd = game.getCurrentPlayer().getPlayerNumber();
+
+        String expectedOutput = "All players declined or were unable to sponsor this quest.";
+
+        assertAll(
+                () -> assertTrue(output.toString().contains(expectedOutput)),
+                () -> assertEquals(1, playersTurnAtStart),
+                () -> assertEquals(2, playersTurnAtEnd)
+        );
+    }
 
 }
