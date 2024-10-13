@@ -52,10 +52,10 @@ public class Game {
         }
     }
 
-    public Card drawEventCard() {
+    public Card drawEventCard(Scanner input, PrintWriter output) {
         this.currentEventCard = this.eventDeck.drawCard();
 
-        display.displayCurrentEventCard(this.currentEventCard, new PrintWriter(System.out));
+        display.displayCurrentEventCard(this.currentEventCard, output);
 
         switch(this.currentEventCard.getType()) {
             case 'E':

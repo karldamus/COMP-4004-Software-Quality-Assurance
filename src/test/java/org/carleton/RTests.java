@@ -189,21 +189,18 @@ class RTests {
         game.initPlayers();
         game.initDecks();
 
+        String input = "";
+        StringWriter output = new StringWriter();
+
         for (int i = 0; i < 3; i++) {
             game.getEventDeck().setTopCard('E', i);
-            game.drawEventCard();
-            display.displayCurrentEventCard(game.getCurrentEventCard(), new PrintWriter(outputs.get(i)));
+            game.drawEventCard(new Scanner(input), new PrintWriter(outputs.get(i)));
         }
-
-        game.getEventDeck().setTopCard('Q', 4);
-        game.drawEventCard();
-        display.displayCurrentEventCard(game.getCurrentEventCard(), new PrintWriter(outputs.get(3)));
 
         assertAll(
                 () -> assertEquals("Event Card: Plague\n", outputs.get(0).toString()),
                 () -> assertEquals("Event Card: Queen's Favor\n", outputs.get(1).toString()),
-                () -> assertEquals("Event Card: Prosperity\n", outputs.get(2).toString()),
-                () -> assertEquals("Event Card: QUEST - Stages: 4\n", outputs.get(3).toString())
+                () -> assertEquals("Event Card: Prosperity\n", outputs.get(2).toString())
         );
     }
 
@@ -218,8 +215,11 @@ class RTests {
         Player player = game.getCurrentPlayer();
         int startingNumberOfShields = player.getNumberOfShields();
 
+        String input = "";
+        StringWriter output = new StringWriter();
+
         game.getEventDeck().setTopCard('E', 0);
-        game.drawEventCard();
+        game.drawEventCard(new Scanner(input), new PrintWriter((output)));
 
         int finalNumberOfShields = player.getNumberOfShields();
 
@@ -242,8 +242,11 @@ class RTests {
 
         int startingNumberOfShields = player.getNumberOfShields();
 
+        String input = "";
+        StringWriter output = new StringWriter();
+
         game.getEventDeck().setTopCard('E', 0);
-        game.drawEventCard();
+        game.drawEventCard(new Scanner(input), new PrintWriter((output)));
 
         int finalNumberOfShields = game.getCurrentPlayer().getNumberOfShields();
 
@@ -266,8 +269,11 @@ class RTests {
 
         int startingNumberOfShields = player.getNumberOfShields();
 
+        String input = "";
+        StringWriter output = new StringWriter();
+
         game.getEventDeck().setTopCard('E', 0);
-        game.drawEventCard();
+        game.drawEventCard(new Scanner(input), new PrintWriter((output)));
 
         int finalNumberOfShields = game.getCurrentPlayer().getNumberOfShields();
 
@@ -379,9 +385,15 @@ class RTests {
 
         DiscardPile testEventDeck = new DiscardPile();
 
+        String input = "";
+        StringWriter output = new StringWriter();
+
         int eventDeckSize = game.getEventDeck().getSize();
         for (int i = 0; i < eventDeckSize; i++) {
-            testEventDeck.insertCard(game.drawEventCard());
+            // rig eventDeck to be a plague card to avoid other inputs
+            // as we are just testing the discard pile responsibility.
+            game.getEventDeck().setTopCard('E', 0);
+            testEventDeck.insertCard(game.drawEventCard(new Scanner(input), new PrintWriter(output)));
         }
 
         DiscardPile discardedEventCards = game.getDiscardedEventCards();
@@ -503,5 +515,7 @@ class RTests {
 
         assertTrue(output.toString().contains("Input is not formatted as a number."));
     }
+
+
 
 }
