@@ -58,4 +58,20 @@ public class Display {
         return inputNum;
     }
 
+    public boolean requestToSponsorQuest(int numberOfQuestStages, Player player, Scanner input, PrintWriter output) {
+        String message = "Player " + player.getPlayerNumber() + ": Would you like to sponsor this quest with " + numberOfQuestStages + " stages? (y/n)";
+        output.println(message); output.flush();
+
+        String inputResponse = (input.nextLine()).toLowerCase().strip();
+
+        if (inputResponse.equals("y")) {
+            return true;
+        } else if (inputResponse.equals("n")) {
+            return false;
+        } else {
+            output.println("Invalid input.");
+            return requestToSponsorQuest(numberOfQuestStages, player, input, output);
+        }
+    }
+
 }

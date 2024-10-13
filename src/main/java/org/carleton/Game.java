@@ -62,10 +62,51 @@ public class Game {
                 if (this.currentEventCard.getValue() == 0)
                     this.players[currentPlayersTurn].plague();
                 break;
+
+            case 'Q':
+                int indexOfPlayerToSponsorQuest = -1;
+
+                for (int i = 0; i < this.players.length; i++) {
+                    int currentIndex = (this.currentPlayersTurn + i) % this.players.length;
+                    if (canPlayerSponsorQuest(this.currentEventCard.getValue(), players[currentIndex])) {
+                        Boolean playerWillSponsorQuest = display.requestToSponsorQuest(this.currentEventCard.getValue(), players[currentIndex], input, output);
+                        if (playerWillSponsorQuest) {
+                            indexOfPlayerToSponsorQuest = currentIndex;
+                        }
+                    } else {
+                        String message = "Player " + (currentIndex + 1) + " is unable to sponsor this quest.\n";
+                        display.singleMessage(message, output);
+                    }
+
+                    if (indexOfPlayerToSponsorQuest != -1) {
+                        // Create new Quest
+
+                        break;
+                    }
+                }
+
+                if (indexOfPlayerToSponsorQuest == -1) {
+                    String message = "All players declined or were unable to sponsor this quest.\n";
+                    display.singleMessage(message, output);
+                    this.endPlayersTurn();
+                }
+
+                break;
         }
 
         this.discardedEventCards.insertCard(this.currentEventCard);
         return this.currentEventCard;
+    }
+
+    public boolean canPlayerSponsorQuest(int numberOfQuestStages, Player player) {
+        int numFoeCards = 0;
+
+        for (Card card : player.getHand()) {
+            if (card.getType() == 'F')
+                numFoeCards += 1;
+        }
+
+        return numFoeCards >= numberOfQuestStages;
     }
 
     public Card drawAdventureCard() {
