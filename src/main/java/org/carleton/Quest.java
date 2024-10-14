@@ -59,15 +59,15 @@ public class Quest {
         this.setUpStages();
     }
 
-    public void startQuest() {
-        while (this.currentStage <= this.numberOfStages) {
-            display.startOfStage(this, output);
-
-            questContinuationPrompt();
-
-            this.endCurrentStage();
-        }
-    }
+//    public void startQuest() {
+//        while (this.currentStage <= this.numberOfStages) {
+//            display.startOfStage(this, output);
+//
+//            questContinuationPrompt();
+//
+//            this.endCurrentStage();
+//        }
+//    }
 
     public void questContinuationPrompt() {
         ArrayList<Integer> indicesToRemove = new ArrayList<>();
@@ -200,5 +200,5 @@ public class Quest {
 
     public void setCurrentStage(int stageNumber) { this.currentStage = stageNumber;}
     public int getCurrentStage() {return this.currentStage;}
-
+    public int getNumberOfStages() { return this.numberOfStages; }
 }

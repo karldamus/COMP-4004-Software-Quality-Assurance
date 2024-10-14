@@ -556,8 +556,8 @@ class RTests {
         game.getAdventureDeck().shuffle();
         game.dealCards();
 
-        String input = "y\nQuit\ndevQuit-comp4004\n";
-        String input2 = "y\n2\nQuit\n1\nQuit\ndevQuit-comp4004";
+        String input = "y\nQuit\ndevQuit-comp4004\nn\nn\nn\n";
+        String input2 = "y\n2\nQuit\n1\nQuit\ndevQuit-comp4004\nn\nn\nn\n";
         StringWriter output = new StringWriter();
         StringWriter output2 = new StringWriter();
 

@@ -82,6 +82,9 @@ public class Game {
                     if (indexOfPlayerToSponsorQuest != -1) {
                         // Create new Quest
                         this.activeQuest = new Quest(this.currentEventCard.getValue(), players, indexOfPlayerToSponsorQuest, this.display, input, output);
+
+                        questLoop();
+
                         break;
                     }
                 }
@@ -97,6 +100,24 @@ public class Game {
 
         this.discardedEventCards.insertCard(this.currentEventCard);
         return this.currentEventCard;
+    }
+
+    public void questLoop() {
+        for (int i = 1; i <= activeQuest.getNumberOfStages(); i++) {
+
+            activeQuest.questContinuationPrompt();
+
+            if (activeQuest.getEligiblePlayersForCurrentStage().isEmpty()) {
+                endQuest();
+                break;
+            }
+
+            activeQuest.endCurrentStage();
+        }
+    }
+
+    public void endQuest() {
+
     }
 
     public boolean canPlayerSponsorQuest(int numberOfQuestStages, Player player) {
