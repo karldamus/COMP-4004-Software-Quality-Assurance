@@ -70,7 +70,18 @@ public class Game {
                 if (this.currentEventCard.getValue() == 1) {
                     this.drawAdventureCard(this.getCurrentPlayer());
                     this.drawAdventureCard(this.getCurrentPlayer());
+                    display.displayPlayersHand(this.getCurrentPlayer(), output);
                     this.trimHand(getCurrentPlayer(), input, output);
+                    break;
+                }
+
+                if (this.currentEventCard.getValue() == 2) {
+                    for (Player player : players) {
+                        this.drawAdventureCard(player);
+                        this.drawAdventureCard(player);
+                        display.displayPlayersHand(player, output);
+                        this.trimHand(player, input, output);
+                    }
                     break;
                 }
 
@@ -202,8 +213,6 @@ public class Game {
         if (numberOfCardsToDiscard == 0)
             return;
 
-        display.displayPlayersHand(player, output);
-
         // make request
         String requestMessage = "Enter the position of a card to remove (1-" + player.getHand().size() + ")\n";
         int inputNum = display.requestIntegerInput(requestMessage, input, output);
@@ -221,6 +230,8 @@ public class Game {
 
             String message = "Card " + inputNum + " Removed.\n";
             display.singleMessage(message, output);
+
+            display.displayPlayersHand(player, output);
         }
 
         if (computeNumberOfCardsToDiscard(player) > 0)
