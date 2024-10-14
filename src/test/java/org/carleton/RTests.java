@@ -987,6 +987,44 @@ class RTests {
     }
 
 
+    @Test
+    @DisplayName("RESP-26-test-1")
+    @Description("Participant tries to use a Foe card for their attack.")
+    public void RESP26Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                Quit
+                y
+                n
+                n
+                2
+                1
+                6
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+
+        assertTrue(output.toString().contains("Selected card must be a weapon card, not a Foe card."));
+    }
+
+
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
         Quest quest = new Quest(4, players, 1, display, input, output);
