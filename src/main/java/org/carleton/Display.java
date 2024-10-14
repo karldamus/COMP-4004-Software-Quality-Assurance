@@ -1,6 +1,7 @@
 package org.carleton;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Display {
@@ -69,9 +70,25 @@ public class Display {
         } else if (inputResponse.equals("n")) {
             return false;
         } else {
-            output.println("Invalid input.");
+            output.println("Invalid input."); output.flush();
             return requestToSponsorQuest(numberOfQuestStages, player, input, output);
         }
     }
 
+    public String requestSingleCardForStage(int currentStageNumber, int numberOfStages, Player sponsor, Scanner input, PrintWriter output) {
+        String message = "Player " + sponsor.getPlayerNumber() + ": Enter number of a card to add to stage (" + currentStageNumber + "/" + numberOfStages + ") or enter 'Quit' to save current stage.";
+        output.println(message); output.flush();
+
+        return input.nextLine().strip();
+    }
+
+    public void stageAcceptedMessage(int stageNumber, ArrayList<Card> cards, PrintWriter output) {
+        output.print("Stage " + stageNumber + " accepted. Cards included in stage: ");
+
+        for (Card card : cards) {
+            output.print(card.getType() + "" + card.getValue() + " ");
+        }
+
+        output.println(); output.flush();
+    }
 }

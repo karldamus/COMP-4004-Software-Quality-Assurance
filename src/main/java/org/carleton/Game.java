@@ -13,6 +13,7 @@ public class Game {
     private int currentPlayersTurn;
     private Card currentEventCard;
     private Display display;
+    private Quest activeQuest;
 
 
     public Game() {
@@ -80,7 +81,7 @@ public class Game {
 
                     if (indexOfPlayerToSponsorQuest != -1) {
                         // Create new Quest
-
+                        this.activeQuest = new Quest(this.currentEventCard.getValue(), players, indexOfPlayerToSponsorQuest, this.display, input, output);
                         break;
                     }
                 }
