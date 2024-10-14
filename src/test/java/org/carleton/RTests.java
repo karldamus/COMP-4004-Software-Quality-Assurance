@@ -777,7 +777,40 @@ class RTests {
         assertTrue(output.toString().contains("End of player 1 turn. Press Enter to switch player."));
     }
 
+    @Test
+    @DisplayName("RESP-21-test-1")
+    @Description("Participant enters valid position of a card for an attack and defeats the stage.")
+    public void RESP21Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+        Display display = new Display();
 
+
+        String input = """
+                y
+                1
+                Quit
+                y
+                n
+                n
+                12
+                Quit""";
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Player 2 attacks with E30. The attack is successful!"));
+    }
 
 
     // =============================================
