@@ -300,6 +300,57 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-9-test-1")
+    @Description("Player draws Queen's favor card")
+    void RESP9Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.getEventDeck().setTopCard('E', 1);
+
+        String input = "";
+        StringWriter output = new StringWriter();
+
+        int sizeOfHandBefore = game.getPlayers()[0].getHand().size();
+
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        int sizeOfHandAfter = game.getPlayers()[0].getHand().size();
+
+        assertAll(
+                () -> assertEquals(0, sizeOfHandBefore),
+                () -> assertEquals(2, sizeOfHandAfter)
+        );
+    }
+
+    @Test
+    @DisplayName("RESP-9-test-2")
+    @Description("Player draws Queen's favor card and trims hand")
+    void RESP9Test2() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.dealCards();
+        game.getEventDeck().setTopCard('E', 1);
+
+        String input = "1\n1\n";
+        StringWriter output = new StringWriter();
+
+        int sizeOfHandBefore = game.getPlayers()[0].getHand().size();
+
+        game.drawEventCard(new Scanner(input), new PrintWriter(System.out));
+
+        int sizeOfHandAfter = game.getPlayers()[0].getHand().size();
+
+        assertAll(
+                () -> assertEquals(12, sizeOfHandBefore),
+                () -> assertEquals(12, sizeOfHandAfter)
+        );
+    }
+
+
+
 
     @Test
     @DisplayName("RESP-11-test-1")
@@ -512,7 +563,7 @@ class RTests {
         game.drawAdventureCard();
 
         StringWriter output = new StringWriter();
-        String input = "14";
+        String input = "14\n1";
 
         game.trimHand(game.getCurrentPlayer(), new Scanner(input), new PrintWriter(output));
 
