@@ -184,7 +184,10 @@ public class Display {
                     if (inputNum < 1 || inputNum > activeAttacker.getHand().size()) {
                         output.println("Position of card does not exist.");
                     } else {
-                        cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
+                        if (activeAttacker.getHand().get(inputIndex).getType() == 'F')
+                            output.println("Selected card must be a weapon card, not a Foe card.");
+                        else
+                            cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
                     }
                 } catch (NumberFormatException e) {
                     output.println("Invalid input."); output.flush();
