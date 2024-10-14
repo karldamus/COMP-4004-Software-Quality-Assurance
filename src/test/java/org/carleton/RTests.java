@@ -812,6 +812,48 @@ class RTests {
         assertTrue(output.toString().contains("Player 2 attacks with E30. The attack is successful!"));
     }
 
+    @Test
+    @DisplayName("RESP-22-test-1")
+    @Description("Participant enters invalid position of a card for an attack, then enters valid position and does not defeat the stage.")
+    public void RESP22Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                5
+                5
+                Quit
+                y
+                n
+                n
+                notANumber
+                30
+                1
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        assertAll(
+                () -> assertTrue(output.toString().contains("Invalid input.")),
+                () -> assertTrue(output.toString().contains("Position of card does not exist.")),
+                () -> assertTrue(output.toString().contains("Player 2 attacks with F5. The attack fails."))
+        );
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
