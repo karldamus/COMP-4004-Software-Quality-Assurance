@@ -60,6 +60,15 @@ public class Quest {
         this.setUpStages();
     }
 
+    public void removePlayerFromQuest(int playerNumber) {
+        for (int i = 0; i < eligiblePlayersForCurrentStage.size(); i++) {
+            if (eligiblePlayersForCurrentStage.get(i) == playerNumber) {
+                eligiblePlayersForCurrentStage.remove(i);
+                break;
+            }
+        }
+    }
+
 //    public void startQuest() {
 //        while (this.currentStage <= this.numberOfStages) {
 //            display.startOfStage(this, output);

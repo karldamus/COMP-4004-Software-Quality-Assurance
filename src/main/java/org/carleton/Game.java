@@ -154,6 +154,10 @@ public class Game {
                     display.successfulAttack(activeAttacker, cardsInAttack, output);
                 } else {
                     display.failedAttack(activeAttacker, cardsInAttack, output);
+                    activeQuest.removePlayerFromQuest(activeAttacker.getPlayerNumber());
+
+                    if (activeQuest.getEligiblePlayersForCurrentStage().isEmpty())
+                        break;
                 }
 
                 // discard cards used in attack
