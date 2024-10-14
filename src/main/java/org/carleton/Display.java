@@ -149,4 +149,18 @@ public class Display {
 
         return inputResponse.isEmpty();
     }
+
+    public void showWinners(ArrayList<Integer> winners, PrintWriter output) {
+        output.print("Game over! Winners: ");
+
+        for (int i = 0; i < winners.size(); i++) {
+            if (i + 1 == winners.size()) {
+                output.println("Player " + winners.get(i) + "!");
+            } else {
+                output.print("Player " + winners.get(i) + ", ");
+            }
+        }
+
+        output.flush();
+    }
 }

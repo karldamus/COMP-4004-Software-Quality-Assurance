@@ -2,6 +2,7 @@ package org.carleton;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Game {
     private static final int NUM_PLAYERS = 4;
@@ -14,6 +15,8 @@ public class Game {
     private Card currentEventCard;
     private Display display;
     private Quest activeQuest;
+
+    ArrayList<Integer> winners = new ArrayList<>();
 
 
     public Game() {
@@ -152,10 +155,27 @@ public class Game {
             endTurn = display.endTurn(currentPlayersTurn + 1, input, output);
         }
 
+        checkForWinners(output);
+        if (!winners.isEmpty())
+            return;
+
         this.players[currentPlayersTurn].setTurn(false);
 
         this.currentPlayersTurn = (this.currentPlayersTurn + 1) % NUM_PLAYERS;
         this.players[currentPlayersTurn].setTurn(true);
+    }
+
+    public void checkForWinners(PrintWriter output) {
+        winners = new ArrayList<>();
+
+        for (Player player : players) {
+            if (player.getNumberOfShields() >= 7)
+                winners.add(player.getPlayerNumber());
+        }
+
+        if (!winners.isEmpty()) {
+            display.showWinners(winners, output);
+        }
     }
 
     public void trimHand(Player player, Scanner input, PrintWriter output) {
