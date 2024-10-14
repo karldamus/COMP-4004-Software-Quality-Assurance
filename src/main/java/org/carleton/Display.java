@@ -91,4 +91,8 @@ public class Display {
 
         output.println(); output.flush();
     }
+
+    public void startOfStage(Quest quest, PrintWriter output) {
+
+    }
 }

@@ -588,4 +588,139 @@ class RTests {
 
     }
 
+    @Test
+    @DisplayName("RESP-18-test-1")
+    @Description("Game determines and displays set of eligible participants for stage of quest.")
+    void RESP18Test1() {
+        Game game = new Game();
+        Display display = new Display();
+        game.initPlayers();
+
+        String input = "devQuit-comp4004\ndevQuit-comp4004\ndevQuit-comp4004\ndevQuit-comp4004\n";
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(true);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+        }
+
+        Quest quest = getP24StageQuest(game.getPlayers(), display, new Scanner(input), new PrintWriter(output));
+
+        display.startOfStage(quest, new PrintWriter(output));
+
+        assertTrue(output.toString().contains("QUEST Stage 1\nEligible players: P1, P3, P4."));
+    }
+
+
+
+
+    // =============================================
+    private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
+        Quest quest = new Quest(4, players, 1, display, input, output);
+
+        ArrayList<Card> stage1Cards = new ArrayList<>(Arrays.asList(
+            new Card('F', 5),
+            new Card('H', 10)
+        ));
+
+        ArrayList<Card> stage2Cards = new ArrayList<>(Arrays.asList(
+            new Card('F', 15),
+            new Card('S', 10)
+        ));
+
+        ArrayList<Card> stage3Cards = new ArrayList<>(Arrays.asList(
+            new Card('F', 15),
+            new Card('D', 5),
+            new Card('B', 15)
+        ));
+
+        ArrayList<Card> stage4Cards = new ArrayList<>(Arrays.asList(
+            new Card('F', 40),
+            new Card('B', 15)
+        ));
+
+        quest.addStage(1, stage1Cards);
+        quest.addStage(2, stage2Cards);
+        quest.addStage(3, stage3Cards);
+        quest.addStage(4, stage4Cards);
+
+        return quest;
+    }
+
+    private ArrayList<ArrayList<Card>> getTestStartingHands(boolean questCardsRemoved) {
+        ArrayList<Card> p1Hand = new ArrayList<>(Arrays.asList(
+            new Card('F', 5),
+            new Card('F', 5),
+            new Card('F', 15),
+            new Card('F', 15),
+            new Card('D', 5),
+            new Card('S', 10),
+            new Card('S', 10),
+            new Card('H', 10),
+            new Card('H', 10),
+            new Card('B', 15),
+            new Card('L', 20)
+        ));
+
+        ArrayList<Card> p2Hand;
+
+        if (questCardsRemoved) {
+            p2Hand = new ArrayList<>(Arrays.asList(
+                new Card('F', 5),
+                new Card('H', 10),
+                new Card('E', 30)
+            ));
+        } else {
+            p2Hand = new ArrayList<>(Arrays.asList(
+                new Card('F', 5),
+                new Card('F', 5),
+                new Card('F', 15),
+                new Card('F', 15),
+                new Card('F', 40),
+                new Card('D', 5),
+                new Card('S', 10),
+                new Card('H', 10),
+                new Card('H', 10),
+                new Card('B', 15),
+                new Card('B', 15),
+                new Card('E', 30)
+            ));
+        }
+
+        ArrayList<Card> p3Hand = new ArrayList<>(Arrays.asList(
+            new Card('F', 5),
+            new Card('F', 5),
+            new Card('F', 5),
+            new Card('F', 15),
+            new Card('D', 5),
+            new Card('S', 10),
+            new Card('S', 10),
+            new Card('S', 10),
+            new Card('H', 10),
+            new Card('H', 10),
+            new Card('B', 15),
+            new Card('L', 20)
+        ));
+
+        ArrayList<Card> p4Hand = new ArrayList<>(Arrays.asList(
+            new Card('F', 5),
+            new Card('F', 15),
+            new Card('F', 15),
+            new Card('F', 40),
+            new Card('D', 5),
+            new Card('D', 5),
+            new Card('S', 10),
+            new Card('H', 10),
+            new Card('H', 10),
+            new Card('B', 15),
+            new Card('L', 20),
+            new Card('E', 30)
+        ));
+
+        return new ArrayList<ArrayList<Card>>(Arrays.asList(
+                p1Hand, p2Hand, p3Hand, p4Hand
+        ));
+    }
 }

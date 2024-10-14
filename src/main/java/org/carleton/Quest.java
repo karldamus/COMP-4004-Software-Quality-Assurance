@@ -49,6 +49,18 @@ public class Quest {
         this.setUpStages();
     }
 
+    public void addStage(int stageNumber, ArrayList<Card> stageCards) {
+
+    }
+
+    public void setCurrentStage(int stageNumber) {
+
+    }
+
+    public ArrayList<Integer> getEligiblePlayersForCurrentStage() {
+        return null;
+    }
+
     public void setUpStages() {
         // loop through each stage
         for (int i = 1; i <= numberOfStages; i++) {
