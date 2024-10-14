@@ -11,6 +11,7 @@ public class Game {
     private AdventureDeck adventureDeck;
     private EventDeck eventDeck;
     private DiscardPile discardedEventCards;
+    private DiscardPile discardedAdventureCards;
     private int currentPlayersTurn;
     private Card currentEventCard;
     private Display display;
@@ -32,6 +33,7 @@ public class Game {
         this.adventureDeck = new AdventureDeck();
         this.eventDeck = new EventDeck();
         this.discardedEventCards = new DiscardPile();
+        this.discardedAdventureCards = new DiscardPile();
     }
 
     public void initPlayers() {
@@ -150,6 +152,11 @@ public class Game {
                 } else {
                     display.failedAttack(activeAttacker, cardsInAttack, output);
                 }
+
+                // discard cards used in attack
+                for (int j = 0; j < cardsInAttack.size(); j++) {
+                    discardedAdventureCards.insertCard(cardsInAttack.remove(j));
+                }
             }
 
             activeQuest.endCurrentStage();
@@ -263,6 +270,6 @@ public class Game {
     public Card getCurrentEventCard() { return this.currentEventCard; }
 
     public DiscardPile getDiscardedAdventureCards() {
-        return null;
+        return this.discardedAdventureCards;
     }
 }
