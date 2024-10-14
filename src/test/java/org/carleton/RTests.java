@@ -349,7 +349,48 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-10-test-1")
+    @Description("Player draws Prosperity card")
+    void RESP10Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
 
+        game.getEventDeck().setTopCard('E', 2);
+
+        String input = "";
+        StringWriter output = new StringWriter();
+
+        ArrayList<Integer> sizesOfHandsBefore = new ArrayList<>();
+        for (Player player : game.getPlayers())
+            sizesOfHandsBefore.add(player.getHand().size());
+
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        ArrayList<Integer> sizesOfHandsAfter = new ArrayList<>();
+        for (Player player : game.getPlayers())
+            sizesOfHandsAfter.add(player.getHand().size());
+
+        boolean allEqualZero = true;
+        for (Integer i : sizesOfHandsBefore) {
+            if (i != 0)
+                allEqualZero = false;
+        }
+        boolean allEqualTwo = true;
+        for (Integer i : sizesOfHandsAfter) {
+            if (i != 2)
+                allEqualTwo = false;
+        }
+
+        boolean finalAllEqualZero = allEqualZero;
+        boolean finalAllEqualTwo = allEqualTwo;
+
+        assertAll(
+                () -> assertTrue(finalAllEqualTwo),
+                () -> assertTrue(finalAllEqualZero)
+        );
+    }
 
 
     @Test
