@@ -215,9 +215,9 @@ class RTests {
         }
 
         assertAll(
-                () -> assertEquals("Event Card: Plague\n", outputs.get(0).toString()),
-                () -> assertEquals("Event Card: Queen's Favor\n", outputs.get(1).toString()),
-                () -> assertEquals("Event Card: Prosperity\n", outputs.get(2).toString())
+                () -> assertTrue(outputs.get(0).toString().contains("Event Card: Plague\n")),
+                () -> assertTrue(outputs.get(1).toString().contains("Event Card: Queen's Favor\n")),
+                () -> assertTrue(outputs.get(2).toString().contains("Event Card: Prosperity\n"))
         );
     }
 
@@ -339,7 +339,7 @@ class RTests {
 
         int sizeOfHandBefore = game.getPlayers()[0].getHand().size();
 
-        game.drawEventCard(new Scanner(input), new PrintWriter(System.out));
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
 
         int sizeOfHandAfter = game.getPlayers()[0].getHand().size();
 

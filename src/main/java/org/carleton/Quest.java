@@ -138,7 +138,7 @@ public class Quest {
             int inputNum = Integer.parseInt(input.strip());
 
             if (inputNum > players[indexOfSponsor].getHand().size() || inputNum < 1) {
-                String message = "Selected number exceeds range of hand.";
+                String message = "Selected number exceeds range of hand.\n";
                 display.singleMessage(message, output);
             } else {
                 Card card = players[indexOfSponsor].getHand().remove(inputNum - 1);

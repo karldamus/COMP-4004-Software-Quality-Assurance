@@ -76,6 +76,7 @@ public class Display {
     }
 
     public String requestSingleCardForStage(int currentStageNumber, int numberOfStages, Player sponsor, Scanner input, PrintWriter output) {
+        this.displayPlayersHand(sponsor, output);
         String message = "Player " + sponsor.getPlayerNumber() + ": Enter number of a card to add to stage (" + currentStageNumber + "/" + numberOfStages + ") or enter 'Quit' to save current stage.";
         output.println(message); output.flush();
 
