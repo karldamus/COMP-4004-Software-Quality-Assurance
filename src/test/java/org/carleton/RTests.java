@@ -546,4 +546,46 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-17-test-1")
+    @Description("Sponsor sets up a valid quest.")
+    void RESP17Test1() {
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.getAdventureDeck().shuffle();
+        game.dealCards();
+
+        String input = "y\nQuit\ndevQuit-comp4004\n";
+        String input2 = "y\n2\nQuit\n1\nQuit\ndevQuit-comp4004";
+        StringWriter output = new StringWriter();
+        StringWriter output2 = new StringWriter();
+
+        ArrayList<Card> riggedHand = new ArrayList<>(Arrays.asList(
+                new Card('F', 5),
+                new Card('F', 10),
+                new Card('F', 15),
+                new Card('F', 20)
+        ));
+
+        for (int i = 0; i < 8; i ++) {
+            riggedHand.add(new Card('D', 5));
+        }
+
+        game.getCurrentPlayer().setHand(riggedHand);
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        game.getEventDeck().setTopCard('Q', 2);
+        game.drawEventCard(new Scanner(input2), new PrintWriter(output2));
+
+        assertAll(
+            () -> assertTrue(output.toString().contains("A stage cannot be empty.")),
+            () -> assertTrue(output2.toString().contains("Stage 1 accepted. Cards included in stage: F10")),
+            () -> assertTrue(output2.toString().contains("Insufficient value for this stage."))
+        );
+
+    }
+
 }
