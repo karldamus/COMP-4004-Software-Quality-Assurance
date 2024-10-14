@@ -164,4 +164,47 @@ public class Display {
 
         output.flush();
     }
+
+    public ArrayList<Card> promptPlayerToAttack(Player activeAttacker, Scanner input, PrintWriter output) {
+        String inputResponse = "";
+        ArrayList<Card> cardsInAttack = new ArrayList<>();
+
+        while (true) {
+            this.displayPlayersHand(activeAttacker, output);
+            output.println("Enter position of card to include in attack."); output.flush();
+            inputResponse = input.nextLine().strip();
+
+            if (inputResponse.equalsIgnoreCase("quit")) {
+                break;
+            } else {
+                try {
+                    int inputNum = Integer.parseInt(inputResponse);
+                    int inputIndex = inputNum - 1;
+
+                    cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
+                } catch (NumberFormatException e) {
+
+                }
+            }
+
+
+        }
+
+        return cardsInAttack;
+    }
+
+    public void successfulAttack(Player attacker, ArrayList<Card> cardsInAttack, PrintWriter output) {
+        output.print("Player " + attacker.getPlayerNumber() + " attacks with ");
+
+        for (int i = 0; i < cardsInAttack.size(); i++) {
+            if (i+1 == cardsInAttack.size()) {
+                output.print(cardsInAttack.get(i).getType() + "" + cardsInAttack.get(i).getValue() + ". ");
+            } else {
+                output.print(cardsInAttack.get(i).getType() + "" + cardsInAttack.get(i).getValue() + ", ");
+            }
+        }
+
+        output.println("The attack is successful!");
+        output.flush();
+    }
 }

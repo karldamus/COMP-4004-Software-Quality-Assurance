@@ -107,7 +107,7 @@ public class Game {
                         // Create new Quest
                         this.activeQuest = new Quest(this.currentEventCard.getValue(), players, indexOfPlayerToSponsorQuest, this.display, input, output);
 
-                        questLoop();
+                        questLoop(input, output);
 
                         break;
                     }
@@ -126,7 +126,7 @@ public class Game {
         return this.currentEventCard;
     }
 
-    public void questLoop() {
+    public void questLoop(Scanner input, PrintWriter output) {
         for (int i = 1; i <= activeQuest.getNumberOfStages(); i++) {
 
             activeQuest.questContinuationPrompt();
@@ -134,6 +134,20 @@ public class Game {
             if (activeQuest.getEligiblePlayersForCurrentStage().isEmpty()) {
                 endQuest();
                 break;
+            }
+
+            for (Integer playerNumber : activeQuest.getEligiblePlayersForCurrentStage()) {
+                Player activeAttacker = players[playerNumber - 1];
+
+                ArrayList<Card> cardsInAttack = display.promptPlayerToAttack(activeAttacker, input, output);
+
+                int totalAttackValue = 0;
+                for (Card card : cardsInAttack)
+                    totalAttackValue += card.getValue();
+
+                if (totalAttackValue >= activeQuest.getTotalValueOfCurrentStage()) {
+                    display.successfulAttack(activeAttacker, cardsInAttack, output);
+                }
             }
 
             activeQuest.endCurrentStage();

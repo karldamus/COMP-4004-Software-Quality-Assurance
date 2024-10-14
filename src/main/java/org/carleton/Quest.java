@@ -26,6 +26,7 @@ public class Quest {
         }
 
         public ArrayList<Card> getCards() { return this.cards; }
+        public int getTotalValue() { return this.totalValue; }
     }
 
     private ArrayList<Stage> stages;
@@ -201,4 +202,5 @@ public class Quest {
     public void setCurrentStage(int stageNumber) { this.currentStage = stageNumber;}
     public int getCurrentStage() {return this.currentStage;}
     public int getNumberOfStages() { return this.numberOfStages; }
+    public int getTotalValueOfCurrentStage()  { return this.stages.get(currentStage - 1).totalValue; }
 }
