@@ -35,6 +35,8 @@ public class Quest {
     private Display display;
     private Scanner input;
     private PrintWriter output;
+    private ArrayList<Integer> eligiblePlayersForCurrentStage;
+    private int currentStage;
 
     public Quest(int numberOfStages, Player[] players, int indexOfSponsor, Display display, Scanner input, PrintWriter output) {
         this.numberOfStages = numberOfStages;
@@ -45,20 +47,37 @@ public class Quest {
         this.output = output;
 
         this.stages = new ArrayList<>();
+        this.currentStage = 1;
+
+        this.eligiblePlayersForCurrentStage = new ArrayList<>();
+
+        for (int i = 0; i < players.length; i++) {
+            if (i != indexOfSponsor)
+                eligiblePlayersForCurrentStage.add(i + 1);
+        }
 
         this.setUpStages();
     }
 
-    public void addStage(int stageNumber, ArrayList<Card> stageCards) {
+    public void startQuest() {
+        while (this.currentStage <= this.numberOfStages) {
+            display.startOfStage(this, output);
 
+
+            this.endCurrentStage();
+        }
     }
 
-    public void setCurrentStage(int stageNumber) {
+    public void endCurrentStage() {
+        this.currentStage += 1;
+    }
 
+    public void addStage(int stageNumber, ArrayList<Card> stageCards) {
+        this.stages.add(new Stage(stageNumber, stageCards));
     }
 
     public ArrayList<Integer> getEligiblePlayersForCurrentStage() {
-        return null;
+        return eligiblePlayersForCurrentStage;
     }
 
     public void setUpStages() {
@@ -152,5 +171,8 @@ public class Quest {
         return true;
     }
 
+
+    public void setCurrentStage(int stageNumber) { this.currentStage = stageNumber;}
+    public int getCurrentStage() {return this.currentStage;}
 
 }

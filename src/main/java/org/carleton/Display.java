@@ -93,6 +93,20 @@ public class Display {
     }
 
     public void startOfStage(Quest quest, PrintWriter output) {
+        ArrayList<Integer> eligiblePlayers = quest.getEligiblePlayersForCurrentStage();
 
+        output.println("QUEST Stage " + quest.getCurrentStage());
+        output.print("Eligible players: ");
+
+        for (int i = 0; i < eligiblePlayers.size(); i++) {
+            Integer eligiblePlayerNumber = eligiblePlayers.get(i);
+
+            if (i + 1 == eligiblePlayers.size())
+                output.println("P" + eligiblePlayerNumber + ".");
+            else
+                output.print("P" + eligiblePlayerNumber + ", ");
+        }
+
+        output.flush();
     }
 }
