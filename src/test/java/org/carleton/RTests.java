@@ -833,7 +833,7 @@ class RTests {
                 1
                 notANumber
                 30
-                1
+                6
                 Quit""";
 
         StringWriter output = new StringWriter();
@@ -852,7 +852,7 @@ class RTests {
         assertAll(
                 () -> assertTrue(output.toString().contains("Invalid input.")),
                 () -> assertTrue(output.toString().contains("Position of card does not exist.")),
-                () -> assertTrue(output.toString().contains("Player 2 attacks with F5. The attack fails."))
+                () -> assertTrue(output.toString().contains("Player 2 attacks with D5. The attack fails."))
         );
     }
 
