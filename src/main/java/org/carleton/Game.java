@@ -92,7 +92,7 @@ public class Game {
                 if (indexOfPlayerToSponsorQuest == -1) {
                     String message = "All players declined or were unable to sponsor this quest.\n";
                     display.singleMessage(message, output);
-                    this.endPlayersTurn();
+                    this.endPlayersTurn(input, output);
                 }
 
                 break;
@@ -146,7 +146,7 @@ public class Game {
             return player.getHand().size() - 12;
     }
 
-    public void endPlayersTurn() {
+    public void endPlayersTurn(Scanner input, PrintWriter output) {
         this.players[currentPlayersTurn].setTurn(false);
 
         this.currentPlayersTurn = (this.currentPlayersTurn + 1) % NUM_PLAYERS;

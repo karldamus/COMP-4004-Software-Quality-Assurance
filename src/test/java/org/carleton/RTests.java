@@ -338,13 +338,16 @@ class RTests {
         Game game = new Game();
         game.initPlayers();
 
+        String input = "\n";
+        StringWriter output = new StringWriter();
+
         Player[] players = game.getPlayers();
 
         Boolean[] playersTurns = new Boolean[]{false, false, false, false};
 
         for (int i = 0; i < players.length; i++) {
             playersTurns[i] = players[i].isPlayersTurn();
-            game.endPlayersTurn();
+            game.endPlayersTurn(new Scanner(input), new PrintWriter(output));
         }
 
         boolean isAllTrue = Arrays.asList(playersTurns).stream().allMatch(val -> val == true);
@@ -361,10 +364,13 @@ class RTests {
 
         Player[] players = game.getPlayers();
 
-        game.endPlayersTurn(); // end first players turn
-        game.endPlayersTurn(); // end second players turn
-        game.endPlayersTurn(); // end third players turn
-        game.endPlayersTurn(); // end fourth players turn
+        String input = "\n";
+        StringWriter output = new StringWriter();
+
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output)); // end first players turn
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output)); // end second players turn
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output)); // end third players turn
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output)); // end fourth players turn
 
         assertAll(
                 () -> assertTrue(players[0].isPlayersTurn()),
@@ -642,6 +648,24 @@ class RTests {
         quest.questContinuationPrompt();
 
         assertTrue(output.toString().contains("Players remaining in Quest: P1, P4."));
+    }
+
+    @Test
+    @DisplayName("RESP-20-test-1")
+    @Description("Game indicates turn of currrent player has ended and clears the 'hotseat' display. Once that player presses the return key.")
+    public void RESP20Test1() {
+        Game game = new Game();
+
+        String input = "\n";
+        StringWriter output = new StringWriter();
+
+        game.initPlayers();
+        game.initDecks();
+        game.dealCards();
+
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("End of player 1 turn. Press Enter to switch player."));
     }
 
 
