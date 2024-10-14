@@ -147,6 +147,8 @@ public class Game {
 
                 if (totalAttackValue >= activeQuest.getTotalValueOfCurrentStage()) {
                     display.successfulAttack(activeAttacker, cardsInAttack, output);
+                } else {
+                    display.failedAttack(activeAttacker, cardsInAttack, output);
                 }
             }
 

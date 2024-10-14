@@ -181,9 +181,13 @@ public class Display {
                     int inputNum = Integer.parseInt(inputResponse);
                     int inputIndex = inputNum - 1;
 
-                    cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
+                    if (inputNum < 1 || inputNum > activeAttacker.getHand().size()) {
+                        output.println("Position of card does not exist.");
+                    } else {
+                        cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
+                    }
                 } catch (NumberFormatException e) {
-
+                    output.println("Invalid input."); output.flush();
                 }
             }
 
@@ -205,6 +209,25 @@ public class Display {
         }
 
         output.println("The attack is successful!");
+        output.flush();
+    }
+
+    public void failedAttack(Player attacker, ArrayList<Card> cardsInAttack, PrintWriter output) {
+        output.print("Player " + attacker.getPlayerNumber() + " attacks with ");
+
+        if (cardsInAttack.isEmpty()) {
+            output.print("nothing.");
+        } else {
+            for (int i = 0; i < cardsInAttack.size(); i++) {
+                if (i+1 == cardsInAttack.size()) {
+                    output.print(cardsInAttack.get(i).getType() + "" + cardsInAttack.get(i).getValue() + ". ");
+                } else {
+                    output.print(cardsInAttack.get(i).getType() + "" + cardsInAttack.get(i).getValue() + ", ");
+                }
+            }
+        }
+
+        output.println("The attack fails.");
         output.flush();
     }
 }
