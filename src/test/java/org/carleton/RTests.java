@@ -794,6 +794,7 @@ class RTests {
                 y
                 n
                 n
+                1
                 12
                 Quit""";
         StringWriter output = new StringWriter();
@@ -829,6 +830,7 @@ class RTests {
                 y
                 n
                 n
+                1
                 notANumber
                 30
                 1
@@ -870,6 +872,7 @@ class RTests {
                 y
                 n
                 n
+                1
                 12
                 Quit""";
 

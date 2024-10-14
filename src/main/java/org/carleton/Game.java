@@ -141,6 +141,9 @@ public class Game {
             for (Integer playerNumber : activeQuest.getEligiblePlayersForCurrentStage()) {
                 Player activeAttacker = players[playerNumber - 1];
 
+                this.drawAdventureCard(activeAttacker);
+                this.trimHand(activeAttacker, input, output);
+
                 ArrayList<Card> cardsInAttack = display.promptPlayerToAttack(activeAttacker, input, output);
 
                 int totalAttackValue = 0;
