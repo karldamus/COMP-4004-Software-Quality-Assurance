@@ -68,6 +68,10 @@ public class Quest {
         }
     }
 
+    public void questContinuationPrompt() {
+
+    }
+
     public void endCurrentStage() {
         this.currentStage += 1;
     }

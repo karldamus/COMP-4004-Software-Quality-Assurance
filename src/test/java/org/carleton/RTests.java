@@ -613,6 +613,37 @@ class RTests {
         assertTrue(output.toString().contains("QUEST Stage 1\nEligible players: P1, P3, P4."));
     }
 
+    @Test
+    @DisplayName("RESP-19-test-1")
+    @Description("Game prompts in turn each eligible participant as to whether they withdraw from the quest or tackle the current stage of the quest.")
+    void RESP19Test1() {
+        Game game = new Game();
+        Display display = new Display();
+        game.initPlayers();
+
+        String bypassQuestSetup = "devQuit-comp4004\ndevQuit-comp4004\ndevQuit-comp4004\ndevQuit-comp4004\n";
+        // Player 1: Remains
+        // Player 3: Leaves
+        // Player 4: Remains
+        String gameInput = "y\nn\ny\n";
+        String input = bypassQuestSetup + gameInput;
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(true);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+        }
+
+        Quest quest = getP24StageQuest(game.getPlayers(), display, new Scanner(input), new PrintWriter(output));
+
+        quest.questContinuationPrompt();
+
+        assertTrue(output.toString().contains("Players remaining in Quest: P1, P4."));
+    }
+
 
 
 
