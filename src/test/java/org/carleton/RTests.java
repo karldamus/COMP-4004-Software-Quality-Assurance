@@ -938,6 +938,54 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-25-test-1")
+    @Description("Participants with an attack less than the value of current stage become unavailable to further participate in the quest.")
+    public void RESP25Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                3
+                Quit
+                3
+                3
+                Quit
+                y
+                y
+                n
+                12
+                7
+                Quit
+                12
+                12
+                11
+                Quit
+                y
+                7
+                7
+                7
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 2);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+
+        assertTrue(output.toString().contains("Players remaining in Quest: P3."));
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
