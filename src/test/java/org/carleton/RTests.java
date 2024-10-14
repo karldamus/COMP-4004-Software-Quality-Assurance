@@ -894,6 +894,47 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-24-test-1")
+    @Description("Eligible participant draws 1 adventure card and possibly trims their hand.")
+    public void RESP24Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                Quit
+                y
+                n
+                n
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getPlayers()[1].getHand().remove(1);
+        int sizeOfHandBefore = game.getPlayers()[1].getHand().size();
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        int sizeOfHandAfter = game.getPlayers()[1].getHand().size();
+
+        assertAll(
+                () -> assertEquals(11, sizeOfHandBefore),
+                () -> assertEquals(12, sizeOfHandAfter)
+        );
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
