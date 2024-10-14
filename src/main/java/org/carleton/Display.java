@@ -140,4 +140,13 @@ public class Display {
 
         output.flush();
     }
+
+    public boolean endTurn(int playersTurn, Scanner input, PrintWriter output) {
+        output.println("End of player " + playersTurn + " turn. Press Enter to switch player.");
+        output.flush();
+
+        String inputResponse = input.nextLine();
+
+        return inputResponse.isEmpty();
+    }
 }

@@ -529,7 +529,7 @@ class RTests {
     void RESP16Test1() {
         Game game = new Game();
 
-        String input = "n\nn\nn\nn";
+        String input = "n\nn\nn\nn\n\n\n";
         StringWriter output = new StringWriter();
 
         game.initPlayers();

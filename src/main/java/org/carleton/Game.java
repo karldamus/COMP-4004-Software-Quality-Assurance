@@ -147,6 +147,11 @@ public class Game {
     }
 
     public void endPlayersTurn(Scanner input, PrintWriter output) {
+        boolean endTurn = display.endTurn(currentPlayersTurn + 1, input, output);
+        while (!endTurn) {
+            endTurn = display.endTurn(currentPlayersTurn + 1, input, output);
+        }
+
         this.players[currentPlayersTurn].setTurn(false);
 
         this.currentPlayersTurn = (this.currentPlayersTurn + 1) % NUM_PLAYERS;
