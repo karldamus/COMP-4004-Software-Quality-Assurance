@@ -63,13 +63,35 @@ public class Quest {
         while (this.currentStage <= this.numberOfStages) {
             display.startOfStage(this, output);
 
+            questContinuationPrompt();
 
             this.endCurrentStage();
         }
     }
 
     public void questContinuationPrompt() {
+        ArrayList<Integer> indicesToRemove = new ArrayList<>();
 
+        for (int i = 0; i < eligiblePlayersForCurrentStage.size(); i++) {
+            int indexOfPlayerInPlayersArray = eligiblePlayersForCurrentStage.get(i) - 1;
+
+            boolean remainsInQuest = display.promptPlayerToRemainInQuest(players[indexOfPlayerInPlayersArray], input, output);
+
+            if (!remainsInQuest)
+                indicesToRemove.add(i);
+        }
+
+        ArrayList<Integer> newEligiblePlayers = new ArrayList<Integer>();
+
+        for (int i = 0; i < eligiblePlayersForCurrentStage.size(); i++) {
+            if (!indicesToRemove.contains(i))
+                newEligiblePlayers.add(eligiblePlayersForCurrentStage.get(i));
+        }
+
+        eligiblePlayersForCurrentStage = newEligiblePlayers;
+
+        String preMessage = "Players remaining in Quest: ";
+        display.showEligiblePlayers(preMessage, eligiblePlayersForCurrentStage, output);
     }
 
     public void endCurrentStage() {

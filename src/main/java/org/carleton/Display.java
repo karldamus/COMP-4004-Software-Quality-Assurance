@@ -109,4 +109,35 @@ public class Display {
 
         output.flush();
     }
+
+    public boolean promptPlayerToRemainInQuest(Player player, Scanner input, PrintWriter output) {
+        String message = "Player " + player.getPlayerNumber() + ": Would you like to remain in the quest? (y/n)";
+        output.println(message);
+
+        output.flush();
+
+        String inputResponse = input.nextLine().toLowerCase().strip();
+
+        if (inputResponse.equals("y"))
+            return true;
+        else if (inputResponse.equals("n"))
+            return false;
+        else {
+            this.singleMessage("Invalid input, please enter 'y' or 'n'", output);
+            return promptPlayerToRemainInQuest(player, input, output);
+        }
+    }
+
+    public void showEligiblePlayers(String preMessage, ArrayList<Integer> eligiblePlayers, PrintWriter output) {
+        output.print(preMessage);
+
+        for (int i = 0; i < eligiblePlayers.size(); i++) {
+            if (i + 1 == eligiblePlayers.size())
+                output.println("P" + eligiblePlayers.get(i) + ".");
+            else
+                output.print("P" + eligiblePlayers.get(i) + ", ");
+        }
+
+        output.flush();
+    }
 }
