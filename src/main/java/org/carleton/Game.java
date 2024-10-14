@@ -63,9 +63,19 @@ public class Game {
 
         switch(this.currentEventCard.getType()) {
             case 'E':
-                if (this.currentEventCard.getValue() == 0)
+                if (this.currentEventCard.getValue() == 0) {
                     this.players[currentPlayersTurn].plague();
+                    break;
+                }
+                if (this.currentEventCard.getValue() == 1) {
+                    this.drawAdventureCard(this.getCurrentPlayer());
+                    this.drawAdventureCard(this.getCurrentPlayer());
+                    this.trimHand(getCurrentPlayer(), input, output);
+                    break;
+                }
+
                 break;
+
 
             case 'Q':
                 int indexOfPlayerToSponsorQuest = -1;
@@ -142,6 +152,14 @@ public class Game {
         return card;
     }
 
+    public Card drawAdventureCard(Player player) {
+        Card card = this.adventureDeck.drawCard();
+
+        player.addCardToHand(card);
+
+        return card;
+    }
+
     public int computeNumberOfCardsToDiscard(Player player) {
         if (player.getHand().size() <= 12)
             return 0;
@@ -184,6 +202,8 @@ public class Game {
         if (numberOfCardsToDiscard == 0)
             return;
 
+        display.displayPlayersHand(player, output);
+
         // make request
         String requestMessage = "Enter the position of a card to remove (1-" + player.getHand().size() + ")\n";
         int inputNum = display.requestIntegerInput(requestMessage, input, output);
@@ -201,9 +221,10 @@ public class Game {
 
             String message = "Card " + inputNum + " Removed.\n";
             display.singleMessage(message, output);
-
-            display.displayPlayersHand(player, output);
         }
+
+        if (computeNumberOfCardsToDiscard(player) > 0)
+            trimHand(player, input, output);
     }
 
     // Getters
