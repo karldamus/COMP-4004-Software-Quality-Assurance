@@ -261,4 +261,8 @@ public class Game {
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
     public DiscardPile getDiscardedEventCards() { return discardedEventCards; }
     public Card getCurrentEventCard() { return this.currentEventCard; }
+
+    public DiscardPile getDiscardedAdventureCards() {
+        return null;
+    }
 }

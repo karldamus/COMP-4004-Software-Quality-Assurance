@@ -854,6 +854,46 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("RESP-23-test-1")
+    @Description("All cards used in attack are discarded.")
+    public void RESP23Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+        Display display = new Display();
+
+        String input = """
+                y
+                1
+                Quit
+                y
+                n
+                n
+                12
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        Card discardedCard = game.getDiscardedAdventureCards().getAllCards().get(0);
+
+        assertAll(
+            () -> assertEquals('E', discardedCard.getType()),
+            () ->assertEquals(30, discardedCard.getValue())
+        );
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
