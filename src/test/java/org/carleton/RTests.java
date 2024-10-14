@@ -129,6 +129,23 @@ class RTests {
     }
 
     @Test
+    @DisplayName("RESP-3-test-1")
+    @Description("At the end of a turn, game determines if one or more players have 7 shields. Outputs players that win.")
+    void RESP3Test1() {
+        Game game = new Game();
+        game.initPlayers();
+
+        String input = "\n";
+        StringWriter output = new StringWriter();
+
+        game.getPlayers()[0].awardShields(7);
+
+        game.endPlayersTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Game over! Winners: Player 1!"));
+    }
+
+    @Test
     @DisplayName("RESP-5-test-1")
     @Description("Test the shuffling of a deck using statistical analysis")
     void RESP5Test1() {
