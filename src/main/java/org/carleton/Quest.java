@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class Quest {
-    private class Stage {
+    public class Stage {
         private ArrayList<Card> cards;
         private int stageNumber;
         private int totalValue;
@@ -32,6 +32,7 @@ public class Quest {
     private ArrayList<Stage> stages;
     private int numberOfStages;
     private Player[] players;
+
     private int indexOfSponsor;
     private Display display;
     private Scanner input;
@@ -212,4 +213,8 @@ public class Quest {
     public int getCurrentStage() {return this.currentStage;}
     public int getNumberOfStages() { return this.numberOfStages; }
     public int getTotalValueOfCurrentStage()  { return this.stages.get(currentStage - 1).totalValue; }
+    public ArrayList<Stage> getStages() { return this.stages; }
+    public int getIndexOfSponsor() {
+        return indexOfSponsor;
+    }
 }

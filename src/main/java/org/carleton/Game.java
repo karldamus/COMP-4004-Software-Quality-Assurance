@@ -182,6 +182,19 @@ public class Game {
                 display.singleMessage(message, output);
             }
         }
+
+        // sponsor activity
+        for (Quest.Stage stage : activeQuest.getStages()) {
+            for (Card card : stage.getCards()) {
+                discardedAdventureCards.insertCard(card);
+                this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()]);
+            }
+        }
+
+        for (int i = 1; i <= activeQuest.getNumberOfStages(); i++)
+            this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()]);
+
+        this.trimHand(players[activeQuest.getIndexOfSponsor()], input, output);
     }
 
     public void endQuest() {

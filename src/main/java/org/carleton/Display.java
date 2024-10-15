@@ -40,15 +40,23 @@ public class Display {
     }
 
     public void singleMessage(String message, PrintWriter output) {
-        output.printf(message);
+        output.println(message);
         output.flush();
     }
 
     public int requestIntegerInput(String requestMessage, Scanner input, PrintWriter output) {
         output.printf(requestMessage); output.flush();
 
-        String inputStr = input.nextLine();
+        String inputStr;
+
+        try {
+            inputStr = input.nextLine();
+        } catch (Exception e) {
+            return -1;
+        }
+
         int inputNum = -1;
+
 
         try {
             inputNum = Integer.parseInt(inputStr);
