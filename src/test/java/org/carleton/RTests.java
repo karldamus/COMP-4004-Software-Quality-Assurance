@@ -1154,8 +1154,200 @@ class RTests {
         );
     }
 
+    @Test
+    @DisplayName("A-TEST JP-Scenario")
+    void ATest() {
+        String input = """
+                n
+                y
+                1
+                7
+                Quit
+                2
+                5
+                Quit
+                2
+                3
+                4
+                Quit
+                2
+                3
+                Quit
+                y
+                y
+                y
+                1
+                5
+                5
+                Quit
+                1
+                5
+                4
+                Quit
+                1
+                4
+                6
+                Quit
+                y
+                y
+                y
+                7
+                6
+                Quit
+                9
+                4
+                Quit
+                6
+                6
+                Quit
+                y
+                y
+                9
+                6
+                4
+                Quit
+                7
+                5
+                6
+                Quit
+                y
+                y
+                7
+                6
+                6
+                Quit
+                4
+                4
+                4
+                5
+                Quit
+                
+                1
+                1
+                1
+                1
+                \n
+                \n""";
+
+        StringWriter output = new StringWriter();
+
+        Game game = new Game();
+        game.initPlayers();
+        game.initDecks();
+        game.getEventDeck().shuffle();
+        game.getAdventureDeck().shuffle();
+        game.dealCards();
+
+        game.getEventDeck().setTopCard('Q', 4);
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+        for (int i = 0; i < hands.size(); i++) {
+            game.getPlayers()[i].setHand(hands.get(i));
+        }
+
+        ArrayList<Card> riggedAdventureDeckCards = getRiggedAdventureDeck();
+        for (int i = 0; i < 15; i++) {
+            riggedAdventureDeckCards.add(new Card('F', 5));
+        }
+
+        game.getAdventureDeck().setDeck(riggedAdventureDeckCards);
+
+        game.playersTurn(new Scanner(input), new PrintWriter(output));
+
+        Player p1 = game.getPlayers()[0];
+        Player p2 = game.getPlayers()[1];
+        Player p3 = game.getPlayers()[2];
+        Player p4 = game.getPlayers()[3];
+        ArrayList<Card> p1Hand = p1.getHand();
+        ArrayList<Card> p2Hand = p2.getHand();
+        ArrayList<Card> p3Hand = p3.getHand();
+        ArrayList<Card> p4Hand = p4.getHand();
+
+        // Player 1 Validation
+        char[] p1ExpectedCardTypes = new char[]{'F', 'F', 'F', 'F', 'F', 'H', 'B', 'B', 'L'};
+        int[] p1ExpectedCardValues = new int[]{5, 10, 15, 15, 30, 10, 15, 15, 20};
+        boolean p1TypesEqual = true;
+        boolean p1ValuesEqual = true;
+
+        for (int i = 0; i < p1ExpectedCardTypes.length; i++) {
+            if (p1ExpectedCardTypes[i] != p1Hand.get(i).getType())
+                p1TypesEqual = false;
+            if (p1ExpectedCardValues[i] != p1Hand.get(i).getValue())
+                p1ValuesEqual = false;
+        }
+        boolean finalP1ValuesEqual = p1ValuesEqual;
+        boolean finalP1TypesEqual = p1TypesEqual;
+
+        // Player 3 Validation
+        char[] p3ExpectedCardTypes = new char[]{'F', 'F', 'F', 'F', 'S'};
+        int[] p3ExpectedCardValues = new int[]{5, 5, 15, 30, 10};
+        boolean p3TypesEqual = true;
+        boolean p3ValuesEqual = true;
+
+        for (int i = 0; i < p3ExpectedCardTypes.length; i++) {
+            if (p3ExpectedCardTypes[i] != p3Hand.get(i).getType())
+                p3TypesEqual = false;
+            if (p3ExpectedCardValues[i] != p3Hand.get(i).getValue())
+                p3ValuesEqual = false;
+        }
+        boolean finalP3ValuesEqual = p3ValuesEqual;
+        boolean finalP3TypesEqual = p3TypesEqual;
+
+        // Player 4 Validation
+        char[] p4ExpectedCardTypes = new char[]{'F', 'F', 'F', 'L'};
+        int[] p4ExpectedCardValues = new int[]{15, 15, 40, 20};
+        boolean p4TypesEqual = true;
+        boolean p4ValuesEqual = true;
+
+        for (int i = 0; i < p4ExpectedCardTypes.length; i++) {
+            if (p4ExpectedCardTypes[i] != p4Hand.get(i).getType())
+                p4TypesEqual = false;
+            if (p4ExpectedCardValues[i] != p4Hand.get(i).getValue())
+                p4ValuesEqual = false;
+        }
+        boolean finalP4ValuesEqual = p4ValuesEqual;
+        boolean finalP4TypesEqual = p4TypesEqual;
+
+
+        assertAll(
+                // Player 1 Validation
+                () -> assertEquals(0, p1.getNumberOfShields()),
+                () -> assertEquals(9, p1Hand.size()),
+                () -> assertTrue(finalP1TypesEqual),
+                () -> assertTrue(finalP1ValuesEqual),
+                // Player 3 Validation
+                () -> assertEquals(0, p3.getNumberOfShields()),
+                () -> assertEquals(5, p3Hand.size()),
+                () -> assertTrue(finalP3TypesEqual),
+                () -> assertTrue(finalP3ValuesEqual),
+                // Player 4 Validation
+                () -> assertEquals(4, p4.getNumberOfShields()),
+                () -> assertEquals(4, p4Hand.size()),
+                () -> assertTrue(finalP4TypesEqual),
+                () -> assertTrue(finalP4ValuesEqual),
+                // Player 2 Validation
+                () -> assertEquals(12, p2Hand.size())
+        );
+
+    }
+
 
     // =============================================
+    private static ArrayList<Card> getRiggedAdventureDeck() {
+        return new ArrayList<>(Arrays.asList(
+                new Card('F', 30),
+                new Card('S', 10),
+                new Card('B', 15),
+                new Card('F', 10),
+                new Card('L', 20),
+                new Card('L', 20),
+                new Card('B', 15),
+                new Card('S', 10),
+                new Card('F', 30),
+                new Card('L', 20)
+        ));
+    }
+
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
         Quest quest = new Quest(4, players, 1, display, input, output);
 
