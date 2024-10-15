@@ -168,6 +168,15 @@ public class Game {
 
             activeQuest.endCurrentStage();
         }
+
+        for (int i = 0; i < activeQuest.getEligiblePlayersForCurrentStage().size(); i++) {
+            int indexOfPlayer = activeQuest.getEligiblePlayersForCurrentStage().get(i) - 1;
+
+            players[indexOfPlayer].awardShields(activeQuest.getNumberOfStages());
+
+            String message = "Awarded " + activeQuest.getNumberOfStages() + " shields to player " + activeQuest.getEligiblePlayersForCurrentStage().get(i) + "!";
+            display.singleMessage(message, output);
+        }
     }
 
     public void endQuest() {
