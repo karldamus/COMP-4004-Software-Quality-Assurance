@@ -1024,6 +1024,45 @@ class RTests {
         assertTrue(output.toString().contains("Selected card must be a weapon card, not a Foe card."));
     }
 
+    @Test
+    @DisplayName("RESP-27-test-1")
+    @Description("End of quest, winners are awarded shields.")
+    void RESP27Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                Quit
+                y
+                n
+                n
+                2
+                7
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        assertAll(
+                () -> assertTrue(output.toString().contains("Awarded 1 shields to player 2!")),
+                () -> assertEquals(1, game.getPlayers()[1].getNumberOfShields())
+        );
+
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
