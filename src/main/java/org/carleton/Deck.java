@@ -19,6 +19,10 @@ public class Deck {
         }
     }
 
+    public void setDeck(ArrayList<Card> cards) {
+        this.deck = cards;
+    }
+
     public Card drawCard() {
         return deck.removeFirst();
     }

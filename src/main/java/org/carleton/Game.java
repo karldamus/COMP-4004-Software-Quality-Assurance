@@ -16,17 +16,35 @@ public class Game {
     private Card currentEventCard;
     private Display display;
     private Quest activeQuest;
+    private boolean newGame;
 
     ArrayList<Integer> winners = new ArrayList<>();
 
 
     public Game() {
         this.display = new Display();
+        this.newGame = true;
     }
 
     public void init() {
         this.initDecks();
         this.initPlayers();
+    }
+
+    public void playersTurn(Scanner input, PrintWriter output) {
+        if (newGame) {
+            display.singleMessage("***************************", output);
+            display.singleMessage("WELCOME TO A GAME OF QUESTS", output);
+            display.singleMessage("***************************", output);
+            display.singleMessage("", output);
+            this.newGame = false;
+        }
+
+        display.singleMessage("Player " + getCurrentPlayer().getPlayerNumber() + "'s turn.", output);
+        display.displayPlayerDetails(getCurrentPlayer(), output);
+        this.drawEventCard(input, output);
+
+        this.endPlayersTurn(input, output);
     }
 
     public void initDecks() {
@@ -70,19 +88,30 @@ public class Game {
                     break;
                 }
                 if (this.currentEventCard.getValue() == 1) {
-                    this.drawAdventureCard(this.getCurrentPlayer());
-                    this.drawAdventureCard(this.getCurrentPlayer());
+                    this.drawAdventureCard(this.getCurrentPlayer(), output);
+                    this.drawAdventureCard(this.getCurrentPlayer(), output);
                     display.displayPlayersHand(this.getCurrentPlayer(), output);
                     this.trimHand(getCurrentPlayer(), input, output);
                     break;
                 }
 
                 if (this.currentEventCard.getValue() == 2) {
+                    boolean firstThrough = true;
                     for (Player player : players) {
-                        this.drawAdventureCard(player);
-                        this.drawAdventureCard(player);
+                        if (firstThrough) {
+                            display.promptClearScreen(currentPlayersTurn + 1, player.getPlayerNumber(), input, output);
+                            firstThrough = false;
+                        }
+                        else {
+                            display.promptClearScreen(player.getPlayerNumber() - 1, player.getPlayerNumber(), input, output);
+                        }
+                        this.drawAdventureCard(player, output);
+                        this.drawAdventureCard(player, output);
                         display.displayPlayersHand(player, output);
                         this.trimHand(player, input, output);
+
+                        if (player.getPlayerNumber() == 4)
+                            display.forceClearScreen(output);
                     }
                     break;
                 }
@@ -106,6 +135,11 @@ public class Game {
                     }
 
                     if (indexOfPlayerToSponsorQuest != -1) {
+                        display.forceClearScreen(output);
+
+                        String message = "Player " + (indexOfPlayerToSponsorQuest + 1) + " you are sponsoring this quest with " + this.currentEventCard.getValue() + " stages.";
+                        display.singleMessage(message, output);
+
                         // Create new Quest
                         this.activeQuest = new Quest(this.currentEventCard.getValue(), players, indexOfPlayerToSponsorQuest, this.display, input, output);
 
@@ -118,7 +152,6 @@ public class Game {
                 if (indexOfPlayerToSponsorQuest == -1) {
                     String message = "All players declined or were unable to sponsor this quest.\n";
                     display.singleMessage(message, output);
-                    this.endPlayersTurn(input, output);
                 }
 
                 break;
@@ -138,10 +171,12 @@ public class Game {
                 break;
             }
 
+            ArrayList<Integer> failedPlayers = new ArrayList<>();
+
             for (Integer playerNumber : activeQuest.getEligiblePlayersForCurrentStage()) {
                 Player activeAttacker = players[playerNumber - 1];
 
-                this.drawAdventureCard(activeAttacker);
+                this.drawAdventureCard(activeAttacker, output);
                 this.trimHand(activeAttacker, input, output);
 
                 ArrayList<Card> cardsInAttack = display.promptPlayerToAttack(activeAttacker, input, output);
@@ -154,7 +189,8 @@ public class Game {
                     display.successfulAttack(activeAttacker, cardsInAttack, output);
                 } else {
                     display.failedAttack(activeAttacker, cardsInAttack, output);
-                    activeQuest.removePlayerFromQuest(activeAttacker.getPlayerNumber());
+//                    activeQuest.removePlayerFromQuest(activeAttacker.getPlayerNumber());
+                    failedPlayers.add(activeAttacker.getPlayerNumber());
 
                     if (activeQuest.getEligiblePlayersForCurrentStage().isEmpty())
                         break;
@@ -164,6 +200,10 @@ public class Game {
                 for (int j = 0; j < cardsInAttack.size(); j++) {
                     discardedAdventureCards.insertCard(cardsInAttack.remove(j));
                 }
+            }
+
+            for (Integer failedPlayer : failedPlayers) {
+                activeQuest.removePlayerFromQuest(failedPlayer);
             }
 
             activeQuest.endCurrentStage();
@@ -178,21 +218,30 @@ public class Game {
 
                 players[indexOfPlayer].awardShields(activeQuest.getNumberOfStages());
 
-                String message = "Awarded " + activeQuest.getNumberOfStages() + " shields to player " + activeQuest.getEligiblePlayersForCurrentStage().get(i) + "!";
+                display.singleMessage("", output);
+                display.singleMessage("*******************************", output);
+                display.singleMessage("       QUEST COMPLETE!         ", output);
+                display.singleMessage("*******************************", output);
+                display.singleMessage("", output);
+                display.singleMessage("Results of quest:", output);
+                String message = "  Awarded " + activeQuest.getNumberOfStages() + " shields to player " + activeQuest.getEligiblePlayersForCurrentStage().get(i) + "!";
                 display.singleMessage(message, output);
+                display.singleMessage("", output);
             }
         }
+
+        display.promptCompleteQuest(activeQuest.getIndexOfSponsor() + 1, input, output);
 
         // sponsor activity
         for (Quest.Stage stage : activeQuest.getStages()) {
             for (Card card : stage.getCards()) {
                 discardedAdventureCards.insertCard(card);
-                this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()]);
+                this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()], output);
             }
         }
 
         for (int i = 1; i <= activeQuest.getNumberOfStages(); i++)
-            this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()]);
+            this.drawAdventureCard(players[activeQuest.getIndexOfSponsor()], output);
 
         this.trimHand(players[activeQuest.getIndexOfSponsor()], input, output);
     }
@@ -220,10 +269,14 @@ public class Game {
         return card;
     }
 
-    public Card drawAdventureCard(Player player) {
+    public Card drawAdventureCard(Player player, PrintWriter output) {
         Card card = this.adventureDeck.drawCard();
 
         player.addCardToHand(card);
+
+        String message = "Player " + player.getPlayerNumber() + ": You drew an adventure card: " + card.getType() + "" + card.getValue();
+        display.singleMessage(message, new PrintWriter(output));
+        display.displayPlayersHand(player, new PrintWriter(output));
 
         return card;
     }
@@ -302,8 +355,8 @@ public class Game {
     public Player getCurrentPlayer() { return this.players[this.currentPlayersTurn]; }
     public DiscardPile getDiscardedEventCards() { return discardedEventCards; }
     public Card getCurrentEventCard() { return this.currentEventCard; }
-
     public DiscardPile getDiscardedAdventureCards() {
         return this.discardedAdventureCards;
     }
+    public ArrayList<Integer> getWinners() { return this.winners; }
 }

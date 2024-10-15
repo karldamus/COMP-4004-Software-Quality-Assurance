@@ -101,6 +101,8 @@ public class Quest {
 
         eligiblePlayersForCurrentStage = newEligiblePlayers;
 
+        display.forceClearScreen(output);
+
         String preMessage = "Players remaining in Quest: ";
         display.showEligiblePlayers(preMessage, eligiblePlayersForCurrentStage, output);
     }
@@ -155,6 +157,7 @@ public class Quest {
                 Card card = players[indexOfSponsor].getHand().remove(inputNum - 1);
 
                 stages.get(stageNumber - 1).addCardToStage(card);
+                display.displayCurrentCardsInStage(stages.get(stageNumber - 1), output);
             }
         } catch (NumberFormatException e) {
             String message = "Input is invalid.\n";

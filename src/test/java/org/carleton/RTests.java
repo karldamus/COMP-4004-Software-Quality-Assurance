@@ -135,7 +135,7 @@ class RTests {
         Game game = new Game();
         game.initPlayers();
 
-        String input = "\n";
+        String input = "\n\n";
         StringWriter output = new StringWriter();
 
         game.getPlayers()[0].awardShields(7);
@@ -359,7 +359,7 @@ class RTests {
 
         game.getEventDeck().setTopCard('E', 2);
 
-        String input = "";
+        String input = "\n\n\n\n\n\n\n\n\n\n";
         StringWriter output = new StringWriter();
 
         ArrayList<Integer> sizesOfHandsBefore = new ArrayList<>();
@@ -447,7 +447,7 @@ class RTests {
         Game game = new Game();
         game.initPlayers();
 
-        String input = "\n";
+        String input = "\n\n\n\n";
         StringWriter output = new StringWriter();
 
         Player[] players = game.getPlayers();
@@ -473,7 +473,7 @@ class RTests {
 
         Player[] players = game.getPlayers();
 
-        String input = "\n";
+        String input = "\n\n\n\n";
         StringWriter output = new StringWriter();
 
         game.endPlayersTurn(new Scanner(input), new PrintWriter(output)); // end first players turn
@@ -648,7 +648,8 @@ class RTests {
 
         game.dealCards();
         game.getEventDeck().setTopCard('Q', 3);
-        game.drawEventCard(new Scanner(input), new PrintWriter((output)));
+
+        game.playersTurn(new Scanner(input), new PrintWriter(output));
 
         int playersTurnAtEnd = game.getCurrentPlayer().getPlayerNumber();
 
@@ -683,7 +684,7 @@ class RTests {
                 new Card('F', 20)
         ));
 
-        for (int i = 0; i < 8; i ++) {
+        for (int i = 0; i < 5; i ++) {
             riggedHand.add(new Card('D', 5));
         }
 
@@ -765,7 +766,7 @@ class RTests {
     public void RESP20Test1() {
         Game game = new Game();
 
-        String input = "\n";
+        String input = "\n\n";
         StringWriter output = new StringWriter();
 
         game.initPlayers();
@@ -774,7 +775,7 @@ class RTests {
 
         game.endPlayersTurn(new Scanner(input), new PrintWriter(output));
 
-        assertTrue(output.toString().contains("End of player 1 turn. Press Enter to switch player."));
+        assertTrue(output.toString().contains("End of player 1 turn.\nPlayer 1: Press the Enter key to clear your screen"));
     }
 
     @Test

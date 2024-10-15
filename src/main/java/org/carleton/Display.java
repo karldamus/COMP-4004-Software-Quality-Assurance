@@ -120,6 +120,8 @@ public class Display {
     }
 
     public boolean promptPlayerToRemainInQuest(Player player, Scanner input, PrintWriter output) {
+        this.forceClearScreen(output);
+
         String message = "Player " + player.getPlayerNumber() + ": Would you like to remain in the quest? (y/n)";
         output.println(message);
 
@@ -151,8 +153,9 @@ public class Display {
     }
 
     public boolean endTurn(int playersTurn, Scanner input, PrintWriter output) {
-        output.println("End of player " + playersTurn + " turn. Press Enter to switch player.");
+        output.println("End of player " + playersTurn + " turn.");
         output.flush();
+        this.promptClearScreen(playersTurn - 1, input, output);
 
         String inputResponse = input.nextLine();
 
@@ -179,7 +182,13 @@ public class Display {
 
         while (true) {
             this.displayPlayersHand(activeAttacker, output);
-            output.println("Enter position of card to include in attack."); output.flush();
+            output.println("Enter position of card to include in attack. Or enter 'Quit' to submit your attack."); output.flush();
+            output.print("Current cards in attack: ");
+            for (Card card : cardsInAttack) {
+                output.print(card.getType() + "" + card.getValue() + " ");
+            }
+            output.println(); output.flush();
+
             inputResponse = input.nextLine().strip();
 
             if (inputResponse.equalsIgnoreCase("quit")) {
@@ -190,12 +199,17 @@ public class Display {
                     int inputIndex = inputNum - 1;
 
                     if (inputNum < 1 || inputNum > activeAttacker.getHand().size()) {
+                        this.forceClearScreen(output);
                         output.println("Position of card does not exist.");
                     } else {
-                        if (activeAttacker.getHand().get(inputIndex).getType() == 'F')
+                        if (activeAttacker.getHand().get(inputIndex).getType() == 'F') {
+                            this.forceClearScreen(output);
                             output.println("Selected card must be a weapon card, not a Foe card.");
-                        else
+                        }
+                        else {
                             cardsInAttack.add(activeAttacker.getHand().remove(inputIndex));
+                            this.forceClearScreen(output);
+                        }
                     }
                 } catch (NumberFormatException e) {
                     output.println("Invalid input."); output.flush();
@@ -209,6 +223,8 @@ public class Display {
     }
 
     public void successfulAttack(Player attacker, ArrayList<Card> cardsInAttack, PrintWriter output) {
+        this.forceClearScreen(output);
+
         output.print("Player " + attacker.getPlayerNumber() + " attacks with ");
 
         for (int i = 0; i < cardsInAttack.size(); i++) {
@@ -239,6 +255,102 @@ public class Display {
         }
 
         output.println("The attack fails.");
+        output.flush();
+    }
+
+    public void promptClearScreen(int currentPlayer, int nextPlayer, Scanner input, PrintWriter output) {
+        try {
+            do {
+                output.println("Player " + currentPlayer + ": Press the Enter key to clear your screen.");
+                output.flush();
+            } while (!input.nextLine().equals(""));
+        } catch (Exception e) {
+            return;
+        }
+
+        for (int i = 0; i < 20; i++) {
+            output.println("\n");
+        }
+        output.flush();
+
+        try {
+            do {
+                output.println("Player " + nextPlayer + ": Press the Enter key to execute your task / start your turn.");
+                output.flush();
+            } while (!input.nextLine().equals(""));
+        } catch (Exception e) {
+            return;
+        }
+
+    }
+
+    public void promptClearScreen(int playersTurnIndex, Scanner input, PrintWriter output) {
+        int playersTurn = playersTurnIndex + 1;
+
+        try {
+            do {
+                output.println("Player " + playersTurn + ": Press the Enter key to clear your screen.");
+                output.flush();
+            } while (!input.nextLine().equals(""));
+        } catch (Exception e) {
+            return;
+        }
+
+        for (int i = 0; i < 20; i++) {
+            output.println("\n");
+        }
+        output.flush();
+
+        int nextPlayer = (playersTurnIndex + 1 % 4) + 1;
+
+        if (nextPlayer == 5)
+            nextPlayer = 1;
+
+        output.println("Player " + nextPlayer + ": Press the Enter key to execute your task / start your turn.");
+        output.flush();
+    }
+
+    public void forceClearScreen(PrintWriter output) {
+        for (int i = 0; i < 20; i++) {
+            output.println("\n");
+        }
+        output.flush();
+    }
+
+    public void displayCurrentCardsInStage(Quest.Stage stage, PrintWriter output) {
+        output.print("Current cards in stage: ");
+        for (Card c : stage.getCards()) {
+            output.print(c.getType() + "" + c.getValue() + " ");
+        }
+        output.println();
+        output.flush();
+    }
+
+    public void displayPlayerDetails(Player player, PrintWriter output) {
+        this.displayPlayersHand(player, output);
+        output.println("Number of shields: " + player.getNumberOfShields());
+
+
+        output.println();
+        output.flush();
+    }
+
+    public void promptCompleteQuest(int sponsor, Scanner input, PrintWriter output) {
+        try {
+            do {
+                output.println("Player " + sponsor + ": Press the Enter key to clear the screen.");
+                output.flush();
+            } while (!input.nextLine().equals(""));
+        } catch (Exception e) {
+            return;
+        }
+
+        for (int i = 0; i < 20; i++) {
+            output.println("\n");
+        }
+        output.flush();
+
+        output.println("Player " + sponsor + ": Press the Enter key to execute your task / start your turn.");
         output.flush();
     }
 }
