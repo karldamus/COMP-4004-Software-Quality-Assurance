@@ -1063,6 +1063,48 @@ class RTests {
 
     }
 
+    @Test
+    @DisplayName("RESP-28-test-1")
+    @Description("End of quest, no winners are found.")
+    void RESP28Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                1
+                1
+                1
+                Quit
+                y
+                n
+                n
+                2
+                7
+                Quit""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        assertAll(
+                () -> assertTrue(output.toString().contains("No winners for this quest.")),
+                () -> assertEquals(0, game.getPlayers()[1].getNumberOfShields())
+        );
+
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
