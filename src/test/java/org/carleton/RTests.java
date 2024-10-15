@@ -1105,6 +1105,54 @@ class RTests {
 
     }
 
+    @Test
+    @DisplayName("RESP-29-test-1")
+    @Description("End of quest, all cards used by sponsor are discarded (if needed discarded cards are added back into deck) in discarded cards), draws same number of cards + number of stages")
+    void RESP29Test1() {
+        Game game = new Game();
+        game.initDecks();
+        game.initPlayers();
+
+        String input = """
+                y
+                1
+                1
+                1
+                1
+                1
+                Quit
+                n
+                n
+                n""";
+
+        StringWriter output = new StringWriter();
+
+        ArrayList<ArrayList<Card>> hands = getTestStartingHands(false);
+
+        int i = 0;
+        for (ArrayList<Card> hand : hands) {
+            game.getPlayers()[i].setHand(hand);
+            i++;
+        }
+
+        game.getPlayers()[0].getHand().removeLast();
+        game.getPlayers()[0].getHand().removeLast();
+        game.getPlayers()[0].getHand().removeLast();
+
+        int numCardsAtStart = game.getPlayers()[0].getHand().size();
+
+        game.getEventDeck().setTopCard('Q', 1);
+        game.drawEventCard(new Scanner(input), new PrintWriter(output));
+
+        int numCardsAtEnd = game.getPlayers()[0].getHand().size();
+
+        assertAll(
+                () -> assertEquals(5, game.getDiscardedAdventureCards().getSize()),
+                () -> assertEquals(9, numCardsAtStart),
+                () -> assertEquals(10, numCardsAtEnd)
+        );
+    }
+
 
     // =============================================
     private Quest getP24StageQuest(Player[] players, Display display, Scanner input, PrintWriter output) {
@@ -1150,6 +1198,7 @@ class RTests {
             new Card('S', 10),
             new Card('H', 10),
             new Card('H', 10),
+            new Card('B', 15),
             new Card('B', 15),
             new Card('L', 20)
         ));
