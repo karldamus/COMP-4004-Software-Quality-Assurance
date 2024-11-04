@@ -225,3 +225,27 @@ Feature: A2_Tests2
     And player 2 should have 5 shields
     And player 3 should have 7 shields
     And player 4 should have 4 shields
+
+  Scenario: 0_winner_quest
+    Given a new game of quests is rigged for zero winner quest
+    When player 1 draws a quest of 2 stages
+    Then player 1 accepts to sponsor the quest
+    And player 1 builds the 2 stage quest with the following card positions "1 1,1"
+      # Stage 1
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 discards cards "13"
+    And player 2 builds attack with cards "1"
+    And player 3 discards cards "13"
+    And player 3 builds attack with cards "1"
+    And player 4 discards cards "13"
+    And player 4 builds attack with cards "1"
+    And player 1 continues
+    And player 1 discards cards "1,1"
+    And player 1 continues
+    And player 2 continues
+    And player 2 continues
+    And player 1's turn is over
+    And all players should have 0 shields
+
