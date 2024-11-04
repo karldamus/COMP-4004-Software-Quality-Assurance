@@ -116,3 +116,112 @@ Feature: A2_Tests2
     And player 2's turn is over
     And player 2 should have 7 shields
     And player 4 should have 7 shields
+
+  Scenario: 1winner_game_with_events
+    Given a new game of quests is rigged for one winner game
+    # 4 Stage Quest
+    When player 1 draws a quest of 4 stages
+    Then player 1 accepts to sponsor the quest
+    And player 1 builds the 4 stage quest with the following card positions "1 1 2 3"
+    # Stage 1
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 discards card 1
+    And player 2 builds attack with cards "6"
+    And player 3 discards card 1
+    And player 3 builds attack with cards "6"
+    And player 4 discards card 1
+    And player 4 builds attack with cards "5"
+    # Stage 2
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 builds attack with cards "7"
+    And player 3 builds attack with cards "7"
+    And player 4 builds attack with cards "10"
+    # Stage 3
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 builds attack with cards "9"
+    And player 3 builds attack with cards "9"
+    And player 4 builds attack with cards "11"
+    # Stage 4
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 builds attack with cards "11"
+    And player 3 builds attack with cards "11"
+    And player 4 builds attack with cards "12"
+    # End of Turn
+    And player 1 continues
+    And player 1 discards cards "1,1,1,1"
+    And player 1 continues
+    And player 2 continues
+    And player 1's turn is over
+
+    And player 2 draws a "plague" event card
+    # End of Turn
+    And player 2 continues
+    And player 3 continues
+    And player 2's turn is over
+
+    And player 3 draws a "prosperity" event card
+    And player 3 continues
+    And player 1 continues
+    And player 1 discards cards "1,1"
+    And player 1 continues
+    And player 2 continues
+    And player 2 discards card 1
+    And player 2 continues
+    And player 3 continues
+    And player 3 discards card 1
+    And player 3 continues
+    And player 4 continues
+    And player 4 discards card 1
+    And player 3 continues
+    # End of Turn
+    And player 4 continues
+    And player 3's turn is over
+
+    And player 4 draws a "queens favor" event card
+    And player 4 discards cards "1,1"
+    # End of Turn
+    And player 4 continues
+    And player 1 continues
+    And player 4's turn is over
+    # 3 Stage Quest
+    And player 1 draws a quest of 3 stages
+    And player 1 accepts to sponsor the quest
+    And player 1 builds the 3 stage quest with the following card positions "5 5 5"
+    # Stage 1
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 4 decides to participate
+    And player 2 discards card 1
+    And player 2 builds attack with cards "10"
+    And player 3 discards card 1
+    And player 3 builds attack with cards "10"
+    And player 4 discards card 1
+    And player 4 builds attack with cards "12"
+    # Stage 2
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 2 builds attack with cards "11"
+    And player 3 builds attack with cards "11"
+    # Stage 3
+    And player 2 decides to participate
+    And player 3 decides to participate
+    And player 2 builds attack with cards "12"
+    And player 3 builds attack with cards "12"
+    # End of Turn
+    And player 1 continues
+    And player 1 discards cards "1,1,1"
+    And player 1 continues
+    And player 2 continues
+    And player 1's turn is over
+    And player 1 should have 0 shields
+    And player 2 should have 5 shields
+    And player 3 should have 7 shields
+    And player 4 should have 4 shields
