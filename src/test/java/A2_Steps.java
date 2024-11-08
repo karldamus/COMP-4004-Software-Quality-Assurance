@@ -197,7 +197,7 @@ public class A2_Steps {
     @And("player {int}'s turn is over")
     public void playerSTurnIsOver(int playerNumber) {
         game.playersTurn(new Scanner(input), new PrintWriter(new StringWriter()));
-//        System.out.println(input);
+
         input = """
                 """;
     }
@@ -264,6 +264,13 @@ public class A2_Steps {
     public void playerIsUnableToSponsorTheQuest(int playerNumber) {
     }
 
+    @And("player {int} should be a winner")
+    public void playerShouldBeAWinner(int playerNumber) {
+        ArrayList<Integer> winners = game.getWinners();
+
+        assertTrue(winners.contains(playerNumber));
+    }
+
 
     // ===========
     public ArrayList<Card> getListOfCardsFromString(String cardsAsString) {
@@ -292,11 +299,4 @@ public class A2_Steps {
 
         return cards;
     }
-
-    @Then("the input is printed")
-    public void theInputIsPrinted() {
-//        System.out.println("Players turn: " + game.getCurrentPlayer().getPlayerNumber());
-        System.out.println(input);
-    }
-
 }

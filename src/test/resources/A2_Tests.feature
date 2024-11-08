@@ -116,6 +116,8 @@ Feature: A2_Tests2
     And player 2's turn is over
     And player 2 should have 7 shields
     And player 4 should have 7 shields
+    And player 2 should be a winner
+    And player 4 should be a winner
 
   Scenario: 1winner_game_with_events
     Given a new game of quests is rigged for one winner game
@@ -225,6 +227,7 @@ Feature: A2_Tests2
     And player 2 should have 5 shields
     And player 3 should have 7 shields
     And player 4 should have 4 shields
+    And player 3 should be a winner
 
   Scenario: 0_winner_quest
     Given a new game of quests is rigged for zero winner quest
@@ -248,4 +251,12 @@ Feature: A2_Tests2
     And player 2 continues
     And player 1's turn is over
     And all players should have 0 shields
+    And player 1 should have 12 cards in their hand
+    And player 2 should have 11 cards in their hand
+    And player 3 should have 11 cards in their hand
+    And player 4 should have 11 cards in their hand
+    And player 1 should have cards "F70,F70,F70,F70,F70,F70,F70,D5,D5,D5,D5,D5"
+    And player 2 should have cards "D5,D5,D5,D5,D5,D5,D5,D5,D5,D5,D5"
+    And player 3 should have cards "D5,D5,D5,D5,D5,D5,D5,D5,D5,D5,D5"
+    And player 4 should have cards "D5,D5,D5,D5,D5,D5,D5,D5,D5,D5,D5"
 
