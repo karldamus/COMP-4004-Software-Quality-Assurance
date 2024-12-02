@@ -1,4 +1,4 @@
-package main.java.org.carleton;
+package org.carleton;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -16,8 +16,9 @@ public class Main {
         game.initialize();
         game.setTextDisplay(input, output);
 
-        game.requestPlayersToContinue(new Quest(2, 4));
-
+        while (!game.gameOver()) {
+            game.playerTurn();
+        }
     }
 
 

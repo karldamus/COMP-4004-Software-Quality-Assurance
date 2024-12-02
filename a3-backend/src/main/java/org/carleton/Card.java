@@ -1,4 +1,4 @@
-package main.java.org.carleton;
+package org.carleton;
 
 import java.util.ArrayList;
 import java.util.Arrays;

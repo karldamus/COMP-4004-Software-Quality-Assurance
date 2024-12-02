@@ -1,4 +1,4 @@
-package main.java.org.carleton;
+package org.carleton;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -17,10 +17,16 @@ public class Game {
     PrintWriter output;
     private boolean useTextDisplay = true;
 
+    private boolean gameOver;
+
     private Quest activeQuest;
 
     public Game() {
+        gameOver = false;
+    }
 
+    public boolean gameOver() {
+        return this.gameOver;
     }
 
     public void playerTurn() {
@@ -162,6 +168,8 @@ public class Game {
                     displayGameMessage("Winner: Player " + player.getPlayerNumber());
                 }
             }
+
+            gameOver = true;
         }
     }
 

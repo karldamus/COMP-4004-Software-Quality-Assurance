@@ -1,6 +1,6 @@
-package test.java.org.carleton;
+package org.carleton;
 
-import main.java.org.carleton.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

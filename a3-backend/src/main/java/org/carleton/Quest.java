@@ -1,11 +1,11 @@
-package main.java.org.carleton;
+package org.carleton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static main.java.org.carleton.QuestStageCodes.*;
+import static org.carleton.QuestStageCodes.*;
 
 public class Quest {
     private int sponsor;

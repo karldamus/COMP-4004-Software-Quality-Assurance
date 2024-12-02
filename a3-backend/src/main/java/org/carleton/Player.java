@@ -1,4 +1,4 @@
-package main.java.org.carleton;
+package org.carleton;
 
 public class Player {
     private int playerNumber;
