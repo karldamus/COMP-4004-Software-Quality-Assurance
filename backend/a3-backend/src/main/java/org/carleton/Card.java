@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Card implements Comparable<Card> {
-
     private char type;
     private int value;
 
@@ -13,12 +12,9 @@ public class Card implements Comparable<Card> {
         this.value = value;
     }
 
-    public char getType() {
-        return type;
-    }
-
-    public int getValue() {
-        return value;
+    @Override
+    public String toString() {
+        return this.type + "" + this.value;
     }
 
     @Override
@@ -55,4 +51,15 @@ public class Card implements Comparable<Card> {
                 return 0;
         }
     }
+
+    public void setType(char type) {
+        this.type = type;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public char getType() { return this.type; }
+    public int getValue() { return this.value; }
 }

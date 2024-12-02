@@ -3,9 +3,6 @@ package org.carleton;
 import java.util.ArrayList;
 
 public class AdventureDeck extends Deck {
-
-
-
     private class FoeCard extends Card {
         public FoeCard(int value) {
             super('F', value);
@@ -19,15 +16,15 @@ public class AdventureDeck extends Deck {
     }
 
     public AdventureDeck() {
-        this.deck = new ArrayList<>();
+        this.setDeck(new ArrayList<>());
 
         int[] valueOfFoes = new int[]{5, 10, 15, 20, 25, 30, 35, 40, 50, 70};
         int[] numberOfFoes = new int[]{8, 7, 8, 7, 7, 4, 4, 2, 2, 1};
 
         for (int i = 0; i < valueOfFoes.length; i++) {
             for (int j = 0; j < numberOfFoes[i]; j++) {
-                FoeCard f = new FoeCard(valueOfFoes[i]);
-                this.insertCard(f);
+                Card f = new FoeCard(valueOfFoes[i]);
+                this.addCard(f);
             }
         }
 
@@ -37,10 +34,9 @@ public class AdventureDeck extends Deck {
 
         for (int i = 0; i < typesOfWeapons.length; i++) {
             for (int j = 0; j < numberOfWeapons[i]; j++) {
-                WeaponCard w = new WeaponCard(typesOfWeapons[i], valuesOfWeapons[i]);
-                this.insertCard(w);
+                Card w = new WeaponCard(typesOfWeapons[i], valuesOfWeapons[i]);
+                this.addCard(w);
             }
         }
     }
-
 }

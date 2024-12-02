@@ -3,13 +3,11 @@ package org.carleton;
 import java.util.ArrayList;
 
 public class EventDeck extends Deck {
-
     private class QuestCard extends Card {
         public QuestCard(int value) {
             super('Q', value);
         }
     }
-
     private class EventCard extends Card {
         public EventCard(int value) {
             super('E', value);
@@ -17,15 +15,15 @@ public class EventDeck extends Deck {
     }
 
     public EventDeck() {
-        this.deck = new ArrayList<>();
+        this.setDeck(new ArrayList<>());
 
         int[] typesOfQuestCards = new int[]{2, 3, 4, 5};
         int[] numberOfQuestCards = new int[]{3, 4, 3, 2};
 
         for (int i = 0; i < typesOfQuestCards.length; i++) {
             for (int j = 0; j < numberOfQuestCards[i]; j++) {
-                QuestCard q = new QuestCard(typesOfQuestCards[i]);
-                this.insertCard(q);
+                Card q = new QuestCard(typesOfQuestCards[i]);
+                this.addCard(q);
             }
         }
 
@@ -36,11 +34,9 @@ public class EventDeck extends Deck {
 
         for (int i = 0; i < valueOfEventCards.length; i++) {
             for (int j = 0; j < numberOfEventCards[i]; j++) {
-                EventCard e = new EventCard(valueOfEventCards[i]);
-                this.insertCard(e);
+                Card e = new EventCard(valueOfEventCards[i]);
+                this.addCard(e);
             }
         }
-
     }
-
 }
