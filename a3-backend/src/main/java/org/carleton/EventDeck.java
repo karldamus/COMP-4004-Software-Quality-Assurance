@@ -22,7 +22,7 @@ public class EventDeck extends Deck {
 
         for (int i = 0; i < typesOfQuestCards.length; i++) {
             for (int j = 0; j < numberOfQuestCards[i]; j++) {
-                QuestCard q = new QuestCard(typesOfQuestCards[i]);
+                Card q = new QuestCard(typesOfQuestCards[i]);
                 this.addCard(q);
             }
         }
@@ -34,7 +34,7 @@ public class EventDeck extends Deck {
 
         for (int i = 0; i < valueOfEventCards.length; i++) {
             for (int j = 0; j < numberOfEventCards[i]; j++) {
-                EventCard e = new EventCard(valueOfEventCards[i]);
+                Card e = new EventCard(valueOfEventCards[i]);
                 this.addCard(e);
             }
         }

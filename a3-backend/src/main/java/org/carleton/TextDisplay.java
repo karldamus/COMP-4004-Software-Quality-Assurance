@@ -3,8 +3,8 @@ package main.java.org.carleton;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Display {
-    public Display() {
+public class TextDisplay {
+    public TextDisplay() {
 
     }
 

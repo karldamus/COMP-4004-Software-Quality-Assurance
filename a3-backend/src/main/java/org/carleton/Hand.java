@@ -14,7 +14,34 @@ public class Hand {
     }
 
     public void addCard(Card card) {
-        hand.add(card);
+        this.hand.addLast(card);
+    }
+
+    public boolean isOrderedAs(String listOfCards) {
+        this.newSort();
+
+        String regexLetters = "[a-zA-Z]";
+        String[] cardsAsArray = listOfCards.split(",");
+
+        for (int i = 0; i < cardsAsArray.length; i++) {
+            try {
+                String card = cardsAsArray[i];
+                String[] cardDetails = card.split(regexLetters);
+                char cardType = card.charAt(0);
+                int cardValue = Integer.parseInt(cardDetails[1]);
+
+                if (hand.get(i).getType() != cardType || hand.get(i).getValue() != cardValue)
+                    return false;
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(e);
+                return false;
+            } catch (Error e) {
+                System.out.println(e);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Card getCard(char type, int value, boolean remove) {
@@ -28,13 +55,13 @@ public class Hand {
         return null;
     }
 
-    public void sort() {
+    public void newSort() {
         for (int i = 1; i < hand.size(); i++) {
             Card curr = hand.get(i);
             int j = i - 1;
 
             while (j >= 0 && hand.get(j).compareTo(curr) > 0) {
-                hand.set(j + 1, hand.get(i));
+                hand.set(j + 1, hand.get(j));
                 j--;
             }
 
@@ -51,13 +78,36 @@ public class Hand {
     }
 
     public String getHandAsString() {
-        StringBuilder handAsString = new StringBuilder();
+        String handAsString = "";
+
+//        StringBuilder handAsString = new StringBuilder();
 
         for (Card card : this.hand) {
-            handAsString.append(card.getType()).append(card.getValue()).append(" ");
+            handAsString += card.getType() + "" + card.getValue() + " ";
         }
 
-        return handAsString.toString();
+        return handAsString;
+    }
+
+    public Card getCard(String cardAsString, boolean remove) {
+        String regexLetters = "[a-zA-Z]";
+
+        try {
+            String[] cardDetails = cardAsString.split(regexLetters);
+
+            char cardType = cardAsString.charAt(0);
+            int cardValue = Integer.parseInt(cardDetails[1]);
+
+            for (int i = 0; i < hand.size(); i++) {
+                if (hand.get(i).getType() == cardType && hand.get(i).getValue() == cardValue) {
+                    return remove ? hand.remove(i) : hand.get(i);
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
+        return null;
     }
 
     public boolean contains(String cardToRemoveAsString) {
@@ -73,7 +123,7 @@ public class Hand {
                 if (cardType == card.getType() && cardValue == card.getValue())
                     return true;
             }
-        } catch (Error e) {
+        } catch (Exception e) {
             return false;
         }
 

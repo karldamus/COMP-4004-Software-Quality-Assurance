@@ -1,17 +1,18 @@
 package main.java.org.carleton;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
     private AdventureDeck adventureDeck;
     private EventDeck eventDeck;
+    private DiscardPile discardedEventCards;
+    private DiscardPile discardedAdventureDeck;
     private ArrayList<Player> players;
 
     private int currentPlayersTurn;
 
-    private Display textDisplay;
+    private TextDisplay textDisplay;
     Scanner input;
     PrintWriter output;
     private boolean useTextDisplay = true;
@@ -22,12 +23,19 @@ public class Game {
 
     }
 
+    public void playerTurn() {
+        drawEventCard();
+
+        requestClearScreen(currentPlayersTurn, getNextPlayerNumber(currentPlayersTurn));
+        currentPlayersTurn = getNextPlayerNumber(currentPlayersTurn);
+    }
+
     public void setTextDisplaySystemIO() {
         setTextDisplay(new Scanner(System.in), new PrintWriter(System.out));
     }
 
     public void setTextDisplay(Scanner input, PrintWriter output) {
-        this.textDisplay = new Display();
+        this.textDisplay = new TextDisplay();
         this.setInput(input);
         this.setOutput(output);
     }
@@ -50,6 +58,9 @@ public class Game {
         this.adventureDeck = new AdventureDeck();
         this.eventDeck = new EventDeck();
 
+        this.discardedAdventureDeck = new DiscardPile();
+        this.discardedEventCards = new DiscardPile();
+
         this.adventureDeck.shuffle();
         this.eventDeck.shuffle();
     }
@@ -67,12 +78,10 @@ public class Game {
         for (int i = 0; i < 12; i++) {
             for (Player player : players)
                 player.addCardToHand(this.adventureDeck.drawCard());
+//                player.
         }
     }
 
-    public void startOfPlayersTurn() {
-
-    }
 
     public void drawEventCard() {
         Card nextEventCard = eventDeck.drawCard();
@@ -80,8 +89,21 @@ public class Game {
         if (nextEventCard.getType() == 'Q') {
             // Quest Card
             int sponsorPlayerNumber = questCard(nextEventCard.getValue());
+
             if (sponsorPlayerNumber != -1) {
-                initializeQuest(sponsorPlayerNumber, nextEventCard.getValue());
+                Quest quest = initializeQuest(sponsorPlayerNumber, nextEventCard.getValue());
+
+                while (quest.getActiveStage() <= quest.getNumberOfStages()) {
+                    requestPlayersToContinue(quest);
+                    playQuestStage(quest);
+                }
+
+                endQuest(quest);
+                checkForGameWinners();
+
+                drawSponsorCards(quest);
+            } else {
+                endQuest(null);
             }
         } else {
             // Event Card
@@ -91,6 +113,177 @@ public class Game {
                 case 2: prosperity(); break;
             }
         }
+
+        discardedEventCards.addCard(nextEventCard);
+    }
+
+    public void drawSponsorCards(Quest quest) {
+        requestClearScreenSingle(quest.getSponsor());
+
+        int numberOfCardsToDraw = 0;
+
+        for (Quest.Stage stage : quest.getAllStages()) {
+            for (Card card : stage.getCardsInStage()) {
+                numberOfCardsToDraw += 1;
+            }
+        }
+
+        numberOfCardsToDraw += quest.getNumberOfStages();
+
+        for (int i = 1; i <= numberOfCardsToDraw; i++) {
+            Card card = this.adventureDeck.drawCard();
+            displayGameMessage("Drew card: " + card.toString());
+            this.players.get(quest.getSponsor() - 1).addCardToHand(card);
+        }
+
+        while (needToTrimHand(quest.getSponsor())) {
+            trimHand(quest.getSponsor());
+        }
+
+        displayPlayerHand(quest.getSponsor());
+    }
+
+    public void checkForGameWinners() {
+        boolean winners = false;
+
+        for (Player player : players) {
+            if (player.getNumberOfShields() >= 7) {
+                winners = true;
+                break;
+            }
+        }
+
+        if (winners) {
+            displayGameMessage("==========");
+            displayGameMessage("GAME OVER!");
+            displayGameMessage("==========");
+            for (Player player : players) {
+                if (player.getNumberOfShields() >= 7) {
+                    displayGameMessage("Winner: Player " + player.getPlayerNumber());
+                }
+            }
+        }
+    }
+
+    public void endQuest(Quest quest) {
+        if (quest == null) {
+            displayGameMessage("No sponsor found for this quest.");
+        } else {
+            if (quest.hasWinners()) {
+                for (int i : quest.getWinners()) {
+                    players.get(i-1).addShields(quest.getNumberOfStages());
+                    displayGameMessage("Quest winner: Player " + i + ". Shields awarded: " + quest.getNumberOfStages());
+                }
+
+                for (int i = 1; i <= 4; i++) {
+                    displayPlayerShields(i);
+                }
+            } else {
+                displayGameMessage("No winners for this quest.");
+            }
+        }
+    }
+
+
+    public void requestPlayersToContinue(Quest quest) {
+        int stageNumber = quest.getActiveStage();
+
+        ArrayList<Integer> activePlayers = quest.getActivePlayers();
+        ArrayList<Integer> playersToRemove = new ArrayList<>();
+
+        for (int i : activePlayers) {
+            clearScreen();
+            requestClearScreenSingle(i);
+            displayPlayerInformation(i);
+            String response = requestGameInput("Player " + i + ". Would you like to participate/remain in this quest? Stage " + quest.getActiveStage() + "/" + quest.getNumberOfStages());
+
+            if (response.strip().equalsIgnoreCase("n")) {
+                playersToRemove.add(i);
+            }
+        }
+
+        clearScreen();
+
+        quest.removeActivePlayers(playersToRemove);
+    }
+
+    public void playQuestStage(Quest quest) {
+        int stageNumber = quest.getActiveStage();
+
+        ArrayList<Integer> activePlayers = quest.getActivePlayers();
+
+        for (int i : activePlayers) {
+            requestClearScreenSingle(i);
+
+            Card cardToDraw = adventureDeck.drawCard();
+            players.get(i - 1).addCardToHand(cardToDraw);
+
+            displayGameMessage("Drew card: " + cardToDraw);
+            displayPlayerHand(i);
+
+            while (needToTrimHand(i)) {
+                trimHand(i);
+            }
+
+            buildAttack(quest, i);
+
+            requestClearScreenSingleEnd(i);
+        }
+
+        ArrayList<Integer> playersToRemove = new ArrayList<>();
+
+        HashMap<Integer, Boolean> completedQuest = quest.completeStage();
+
+        for (Map.Entry<Integer, Boolean> pair : completedQuest.entrySet()) {
+            if (!pair.getValue())
+                playersToRemove.add(pair.getKey());
+
+            String result = "Player " + pair.getKey() + (pair.getValue() ? " won this stage." : " lost this stage.");
+            displayGameMessage(result);
+        }
+
+        quest.removeActivePlayers(playersToRemove);
+    }
+
+    public void buildAttack(Quest quest, int playerNumber) {
+        ArrayList<Card> cardsInAttack = new ArrayList<>();
+
+        while (true) {
+            displayStageInfo(quest);
+            displayCards("Cards included in attack:", cardsInAttack);
+            displayPlayerHand(playerNumber);
+            String response = requestGameInput("Enter a card to add to your attack. Enter quit to submit your attack");
+
+            if (response.equalsIgnoreCase("quit"))
+                break;
+
+            try {
+                if (response.charAt(0) == 'F') {
+                    displayGameError("Cannot submit a foe card as an attack.");
+                } else {
+                    cardsInAttack.add(players.get(playerNumber - 1).getHand().getCard(response.strip(), true));
+                }
+            } catch (Exception e) {
+                displayGameError("Invalid input.");
+            }
+        }
+
+        if (cardsInAttack.isEmpty()) {
+            displayGameMessage("You did not submit an attack. You automatically lose this quest.");
+        } else {
+            quest.submitAttackForCurrentStage(playerNumber, cardsInAttack);
+        }
+
+        for (Card card : cardsInAttack) {
+            discardedAdventureDeck.addCard(card);
+        }
+    }
+
+    public void displayStageInfo(Quest quest) {
+        int activeStage = quest.getActiveStage();
+        int numberOfStages = quest.getNumberOfStages();
+
+        displayGameMessage("Submit an attack for this quest stage " + activeStage + "/" + numberOfStages + ".");
     }
 
     public int questCard(int numStages) {
@@ -117,8 +310,49 @@ public class Game {
         return sponsorPlayerNumber;
     }
 
-    public void initializeQuest(int sponsorPlayerNumber, int numStages) {
+    public Quest initializeQuest(int sponsorPlayerNumber, int numStages) {
+        int stageNumber = 1;
 
+        Quest quest = new Quest(sponsorPlayerNumber, numStages);
+
+        while (stageNumber <= numStages) {
+            displayPlayerHand(sponsorPlayerNumber);
+            displayGameMessage("Cards in stage " + stageNumber + ": " + quest.getStage(stageNumber).getCardsInStageAsString());
+            String response = requestGameInput("Select cards to add to stage " + stageNumber + "/" + numStages + " or enter 'quit' to save this stage");
+
+            if (response.equalsIgnoreCase("quit")) {
+                QuestStageCodes validStage = quest.isValidStage(stageNumber);
+
+                switch (validStage) {
+                    case EMPTY_STAGE:
+                        displayGameError("Stage cannot be empty."); break;
+                    case NO_FOES_IN_STAGE:
+                        displayGameError("Stage must contain at least 1 foe card."); break;
+                    case INSUFFICIENT_VALUE_FOR_STAGE:
+                        displayGameError("Total stage value must be greater than previous stages."); break;
+                    case OKAY_STAGE:
+                        displayGameMessage("Stage submitted with cards: " + quest.getStage(stageNumber).getCardsInStageAsString());
+                        stageNumber += 1;
+                }
+            } else {
+                try {
+
+                    Hand hand = this.getPlayers().get(sponsorPlayerNumber - 1).getHand();
+
+                    if (hand.contains(response))
+                        quest.addCardToStage(stageNumber, this.getPlayers().get(sponsorPlayerNumber - 1).getHand().getCard(response, true));
+                    else
+                        displayGameError("Card '" + response + "' not in your hand.");
+
+                } catch (Exception e) {
+                    displayGameError("Invalid input.");
+                }
+            }
+        }
+
+        requestClearScreenSingleEnd(sponsorPlayerNumber);
+
+        return quest;
     }
 
     public void plagueCard() {
@@ -183,6 +417,29 @@ public class Game {
         }
     }
 
+    public int getNextPlayerNumber(int currentPlayerNumber) {
+        int nextPlayer = (currentPlayerNumber + 1 % 4);
+
+        if (nextPlayer == 5)
+            nextPlayer = 1;
+
+        return nextPlayer;
+    }
+
+    // =======
+    // DISPLAY
+    //
+
+    public void requestClearScreenSingle(int player) {
+        requestGameInput("Player " + player + " please press enter to start your task");
+        clearScreen();
+    }
+
+    public void requestClearScreenSingleEnd(int player) {
+        requestGameInput("Player " + player + " please press enter to clear your screen");
+        clearScreen();
+    }
+
     public void requestClearScreen(int currentPlayer, int nextPlayer) {
         requestGameInput("Player " + currentPlayer + " please press enter to clear your screen");
         clearScreen();
@@ -194,15 +451,6 @@ public class Game {
         if (useTextDisplay) {
             textDisplay.clearScreen(output);
         }
-    }
-
-    public int getNextPlayerNumber(int currentPlayerNumber) {
-        int nextPlayer = (currentPlayerNumber + 1 % 4);
-
-        if (nextPlayer == 5)
-            nextPlayer = 1;
-
-        return nextPlayer;
     }
 
     public String requestGameInput(String message) {
@@ -239,15 +487,22 @@ public class Game {
 
     public void displayPlayerHand(int playerNumber) {
         Player player = players.get(playerNumber - 1);
-        player.getHand().sort();
+//        player.getHand().sort();
+        player.getHand().newSort();
         String hand = player.getHand().getHandAsString();
         displayGameMessage("Player " + playerNumber + " hand: " + hand);
     }
 
-    public void getInput() {
-        if (useTextDisplay) {
+    public void displayCards(String prepend, ArrayList<Card> cards) {
+        StringBuilder result = new StringBuilder();
 
+        result.append(prepend).append(" ");
+
+        for (Card card : cards) {
+            result.append(card.toString()).append(" ");
         }
+
+        displayGameMessage(result.toString());
     }
 
 
@@ -259,5 +514,17 @@ public class Game {
 
     public void setAdventureDeck(AdventureDeck adventureDeck) {
         this.adventureDeck = adventureDeck;
+    }
+
+    public void setCurrentPlayersTurn(int i) {
+        this.currentPlayersTurn = i;
+    }
+
+    public DiscardPile getDiscardedEventCards() {
+        return discardedEventCards;
+    }
+
+    public DiscardPile getDiscardedAdventureDeck() {
+        return discardedAdventureDeck;
     }
 }

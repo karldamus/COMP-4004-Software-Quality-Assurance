@@ -23,7 +23,7 @@ public class AdventureDeck extends Deck {
 
         for (int i = 0; i < valueOfFoes.length; i++) {
             for (int j = 0; j < numberOfFoes[i]; j++) {
-                FoeCard f = new FoeCard(valueOfFoes[i]);
+                Card f = new FoeCard(valueOfFoes[i]);
                 this.addCard(f);
             }
         }
@@ -34,7 +34,7 @@ public class AdventureDeck extends Deck {
 
         for (int i = 0; i < typesOfWeapons.length; i++) {
             for (int j = 0; j < numberOfWeapons[i]; j++) {
-                WeaponCard w = new WeaponCard(typesOfWeapons[i], valuesOfWeapons[i]);
+                Card w = new WeaponCard(typesOfWeapons[i], valuesOfWeapons[i]);
                 this.addCard(w);
             }
         }
