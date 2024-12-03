@@ -14,7 +14,7 @@ public class Hand {
     }
 
     public void addCard(Card card) {
-        this.hand.addLast(card);
+        this.hand.add(card);
     }
 
     public boolean isOrderedAs(String listOfCards) {
@@ -78,6 +78,8 @@ public class Hand {
     }
 
     public String getHandAsString() {
+        this.newSort();
+
         String handAsString = "";
 
 //        StringBuilder handAsString = new StringBuilder();

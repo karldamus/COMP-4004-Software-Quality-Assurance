@@ -1,9 +1,15 @@
 package org.carleton;
 
+import org.springframework.stereotype.Service;
+
 import java.io.PrintWriter;
 import java.util.*;
 
+@Service
 public class Game {
+    private final List<String> outputBuffer = new ArrayList<>();
+    private String nextInput;
+
     private AdventureDeck adventureDeck;
     private EventDeck eventDeck;
     private DiscardPile discardedEventCards;
@@ -15,9 +21,9 @@ public class Game {
     private TextDisplay textDisplay;
     Scanner input;
     PrintWriter output;
-    private boolean useTextDisplay = true;
+    private boolean useTextDisplay = false;
 
-    private boolean gameOver;
+    private boolean gameOver = false;
 
     private Quest activeQuest;
 
@@ -34,6 +40,10 @@ public class Game {
 
         requestClearScreen(currentPlayersTurn, getNextPlayerNumber(currentPlayersTurn));
         currentPlayersTurn = getNextPlayerNumber(currentPlayersTurn);
+    }
+
+    public void useSpringDisplay() {
+        useTextDisplay = false;
     }
 
     public void setTextDisplaySystemIO() {
@@ -58,6 +68,9 @@ public class Game {
         this.initializePlayers();
         this.initializeDecks();
         this.dealCards();
+
+        displayGameMessage("New Game!!!");
+        displayGameMessage("===========");
     }
 
     public void initializeDecks() {
@@ -141,6 +154,8 @@ public class Game {
             displayGameMessage("Drew card: " + card.toString());
             this.players.get(quest.getSponsor() - 1).addCardToHand(card);
         }
+
+        displayPlayerHand(quest.getSponsor());
 
         while (needToTrimHand(quest.getSponsor())) {
             trimHand(quest.getSponsor());
@@ -439,7 +454,7 @@ public class Game {
     //
 
     public void requestClearScreenSingle(int player) {
-        requestGameInput("Player " + player + " please press enter to start your task");
+        requestGameInput("Player " + player + " please press enter to start your task and clear your screen");
         clearScreen();
     }
 
@@ -461,24 +476,98 @@ public class Game {
         }
     }
 
+    private void doNothing() {
+
+    }
+
+    private String uiInput;
+    private String uiOutput;
+
+    public void setUIOutput(String output) {
+        this.uiOutput += output + "\n";
+    }
+
+    public void setUIInput(String input) {
+        this.input = new Scanner(input);
+    }
+
+    public String getUiOutput() {
+        return this.uiOutput;
+    }
+
     public String requestGameInput(String message) {
         if (useTextDisplay) {
             String input = textDisplay.getInput(message, this.input, output);
-            return input.strip();
-        }
 
-        return "";
+            return input.strip();
+        } else {
+            appendOutput(message);
+
+            try {
+                String input = getNextInput();
+                input = input.replace("\"", "");
+                return input.strip();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return "";
+            }
+        }
     }
 
     public void displayGameMessage(String message) {
         if (useTextDisplay) {
             textDisplay.singleMessage(message, output);
+        } else {
+            appendOutput(message);
         }
     }
+
+    public synchronized void appendOutput(String output) {
+        outputBuffer.add(output);
+    }
+
+    public synchronized List<String> fetchAndClearOutputs() {
+        List<String> outputs = new ArrayList<>(outputBuffer);
+        outputBuffer.clear();
+        return outputs;
+    }
+
+    private boolean newGameRequested = false;
+
+    public synchronized void requestNewGame() {
+        this.newGameRequested = true;
+    }
+
+    public synchronized boolean newGameRequested() {
+        if (newGameRequested) {
+            newGameRequested = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public synchronized void setNextInput(String input) {
+        this.nextInput = input;
+        notifyAll();
+    }
+
+    public synchronized String getNextInput() throws InterruptedException {
+        while (nextInput == null) {
+            wait();
+        }
+        String input = nextInput;
+        nextInput = null;
+        return input;
+    }
+
 
     public void displayGameError(String error) {
         if (useTextDisplay) {
             textDisplay.errorMessage(error, output);
+        } else {
+            displayGameMessage("ERROR: " + error);
         }
     }
 

@@ -40,7 +40,7 @@ public class Deck {
     }
 
     public Card drawCard() {
-        return this.deck.removeFirst();
+        return this.deck.remove(0);
     }
 
     public ArrayList<Card> getDeck() { return this.deck; }

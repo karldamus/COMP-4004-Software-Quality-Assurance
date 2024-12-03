@@ -228,14 +228,14 @@ public class RTests {
         Game game = new Game();
         game.initialize();
 
-        game.getPlayers().getFirst().setHand(getF5Hands().getFirst());
+        game.getPlayers().get(0).setHand(getF5Hands().get(0));
 
         StringWriter output = new StringWriter();
         game.setTextDisplay(new Scanner("F5\nE2\nF5"), new PrintWriter(output));
 
         game.queensFavor();
 
-        assertEquals(12, game.getPlayers().getFirst().getHandSize());
+        assertEquals(12, game.getPlayers().get(0).getHandSize());
     }
 
     @Test
@@ -246,7 +246,7 @@ public class RTests {
 
         ArrayList<Hand> riggedHands = getF5Hands();
         for (Player player : game.getPlayers()) {
-            player.setHand(riggedHands.removeFirst());
+            player.setHand(riggedHands.remove(0));
         }
 
         game.setAdventureDeck(getF5AdventureDeck());
@@ -270,7 +270,7 @@ public class RTests {
         Game game = new Game();
         game.initialize();
 
-        game.getPlayers().getFirst().setHand(getF5Hands().getFirst());
+        game.getPlayers().get(0).setHand(getF5Hands().get(0));
 
         StringWriter output = new StringWriter();
         game.setTextDisplay(new Scanner(""), new PrintWriter(output));
@@ -327,8 +327,8 @@ public class RTests {
         game.playerTurn();
 
         assertAll(
-                () -> assertEquals('E', game.getDiscardedEventCards().getDeck().getFirst().getType()),
-                () -> assertEquals(0, game.getDiscardedEventCards().getDeck().getFirst().getValue())
+                () -> assertEquals('E', game.getDiscardedEventCards().getDeck().get(0).getType()),
+                () -> assertEquals(0, game.getDiscardedEventCards().getDeck().get(0).getValue())
         );
     }
 
@@ -341,7 +341,7 @@ public class RTests {
         String input = enterOverride();
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().addCardToHand(new Card('F', 5));
+        game.getPlayers().get(0).addCardToHand(new Card('F', 5));
 
         game.displayPlayerHand(1);
 
@@ -357,12 +357,12 @@ public class RTests {
         String input = "F5\n";
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().addCardToHand(new Card('F', 5));
+        game.getPlayers().get(0).addCardToHand(new Card('F', 5));
 
         game.trimHand(1);
 
         assertAll(
-                () -> assertEquals(12, game.getPlayers().getFirst().getHandSize()),
+                () -> assertEquals(12, game.getPlayers().get(0).getHandSize()),
                 () -> assertTrue(output.toString().contains("Removed card F5"))
         );
     }
@@ -376,7 +376,7 @@ public class RTests {
         String input = "1\nF5\n";
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().addCardToHand(new Card('F', 5));
+        game.getPlayers().get(0).addCardToHand(new Card('F', 5));
 
         game.trimHand(1);
 
@@ -410,7 +410,7 @@ public class RTests {
         String input = "F5\nquit\nF15\nquit\n\n";
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().setHand(new Hand(getTestStartingHands(false).getFirst()));
+        game.getPlayers().get(0).setHand(new Hand(getTestStartingHands(false).get(0)));
         game.initializeQuest(1, 2);
 
         assertAll(
@@ -428,7 +428,7 @@ public class RTests {
         String input = "\nn\n\ny\n\nn\n";
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().setHand(new Hand(getTestStartingHands(false).getFirst()));
+        game.getPlayers().get(0).setHand(new Hand(getTestStartingHands(false).get(0)));
 
         Quest quest = new Quest(1, 1);
 
@@ -520,12 +520,12 @@ public class RTests {
         quest.getActivePlayers().remove(1);
         quest.getActivePlayers().remove(1);
 
-        game.getPlayers().get(1).setHand(new Hand(getTestStartingHands(false).getFirst()));
+        game.getPlayers().get(1).setHand(new Hand(getTestStartingHands(false).get(0)));
         game.buildAttack(quest, 2);
 
         assertAll(
-                () -> assertEquals('L', game.getDiscardedAdventureDeck().getDeck().getFirst().getType()),
-                () -> assertEquals(20, game.getDiscardedAdventureDeck().getDeck().getFirst().getValue()),
+                () -> assertEquals('L', game.getDiscardedAdventureDeck().getDeck().get(0).getType()),
+                () -> assertEquals(20, game.getDiscardedAdventureDeck().getDeck().get(0).getValue()),
                 () -> assertEquals('B', game.getDiscardedAdventureDeck().getDeck().get(1).getType()),
                 () -> assertEquals(15, game.getDiscardedAdventureDeck().getDeck().get(1).getValue())
         );
@@ -540,17 +540,17 @@ public class RTests {
         String input = "F5\n";
         game.setTextDisplay(new Scanner(input), new PrintWriter(output));
 
-        game.getPlayers().getFirst().setHand(new Hand(getTestStartingHands(false).getFirst()));
+        game.getPlayers().get(0).setHand(new Hand(getTestStartingHands(false).get(0)));
 
-        game.getPlayers().getFirst().addCardToHand(game.getAdventureDeck().drawCard());
+        game.getPlayers().get(0).addCardToHand(game.getAdventureDeck().drawCard());
 
-        int sizeOfHandBefore = game.getPlayers().getFirst().getHandSize();
+        int sizeOfHandBefore = game.getPlayers().get(0).getHandSize();
 
         game.trimHand(1);
 
         assertAll(
                 () -> assertEquals(13, sizeOfHandBefore),
-                () -> assertEquals(12, game.getPlayers().getFirst().getHandSize())
+                () -> assertEquals(12, game.getPlayers().get(0).getHandSize())
         );
     }
 
@@ -739,7 +739,8 @@ public class RTests {
     }
 
     private void rigTopOfDeck(Game game, Card card) {
-        game.getAdventureDeck().getDeck().addFirst(card);
+//        game.getAdventureDeck().getDeck().addFirst(card);
+        game.getAdventureDeck().getDeck().add(0, card);
     }
 
 

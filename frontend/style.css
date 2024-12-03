@@ -1,0 +1,39 @@
+*, html {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	width: 100vw;
+}
+
+#game-output {
+	min-height: 300px;
+	
+	/* nice small shadow */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 20px 0;
+}
+
+.main-wrapper {
+	width: 80vw;
+	margin: 0 auto;
+
+	margin-top: 20%;
+	/* display: flex; */
+}
+
+#game-input, #submit, #enter {
+	height: 30px;
+}
+
+#submit, #enter {
+	padding: 2px 10px;
+}
+
+.footer {
+	position: absolute; 
+	bottom: 5%;
+	right: 5%;
+}
